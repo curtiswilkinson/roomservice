@@ -1,0 +1,24 @@
+{
+  "name": "zoey-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Curtis Wilkinson",
+  "license": "MIT",
+  "dependencies": {
+    "cli": "^1.0.1",
+    "md5": "^2.2.1",
+    "mz": "^2.7.0",
+    "toml": "^2.3.3"
+  },
+  "devDependencies": {
+    "@types/cli": "^0.11.19",
+    "@types/md5": "^2.1.32",
+    "@types/mz": "^0.0.32",
+    "prettier": "^1.8.2",
+    "typescript": "^2.6.1"
+  }
+}

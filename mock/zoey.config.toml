@@ -1,0 +1,7 @@
+[service.main]
+build="echo main"
+path="./"
+
+[service.secondary]
+build="echo secondary"
+path="./"

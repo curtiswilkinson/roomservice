@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["es5", "es6", "es2017", "esnext"],
+    "target": "es5",
+    "noImplicitAny": false,
+    "outDir": "built",
+    "rootDir": ".",
+    "sourceMap": false
+  },
+  "exclude": ["node_modules"]
+}
