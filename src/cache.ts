@@ -2,11 +2,12 @@ import * as cli from 'cli'
 import * as md5 from 'md5'
 import * as fs from 'mz/fs'
 import * as path from 'path'
+import constants from './constants'
 
 const generateCachePath = (buildPath: string): string => {
   const name = md5(path.resolve(buildPath))
 
-  return `${process.env.HOME}/zoey/${name}`
+  return constants.cacheBasePath + name
 }
 
 const shouldBuildService = (buildPath: string): Promise<boolean> => {
@@ -27,8 +28,8 @@ const shouldBuildService = (buildPath: string): Promise<boolean> => {
 const write = async (buildPath: string): Promise<void> => {
   const cachePath = generateCachePath(buildPath)
 
-  if (!fs.existsSync(process.env.HOME + '/zoey/')) {
-    await fs.mkdir(process.env.HOME + '/zoey/')
+  if (!fs.existsSync(constants.cacheBasePath)) {
+    await fs.mkdir(constants.cacheBasePath)
   }
   return fs.writeFile(cachePath, '')
 }
