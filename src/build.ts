@@ -9,7 +9,7 @@ interface Results {
   error: string[]
 }
 
-const init = (config: Config, options) => {
+const init = (config: Config, options: any) => {
   const results: Results = { built: [], cache: [], error: [] }
 
   const services = Object.entries(config.service)
@@ -20,8 +20,8 @@ const init = (config: Config, options) => {
   })
 }
 
-const buildService = (options, results: Results) => async (
-  [name, config]
+const buildService = (options: any, results: Results) => async (
+  [name, config]: any
 ): Promise<any> => {
   const fullPath = path.join(options.config, config.path)
   const shouldBuild = await Cache.shouldBuild(fullPath)
