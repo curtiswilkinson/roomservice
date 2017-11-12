@@ -8,7 +8,7 @@
     "build": "tsc"
   },
   "bin": {
-    "zoey": "./main/index.js"
+    "zoey": "./build/index.js"
   },
   "author": "Curtis Wilkinson",
   "license": "MIT",
