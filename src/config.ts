@@ -11,6 +11,6 @@ export interface Config {
 }
 
 const parse = (path: string): Promise<any> =>
-  fs.readFile(path + '/zoey.config.toml').then(toml.parse)
+  fs.readFile(path + 'zoey.config.toml').then(toml.parse)
 
 export default { parse }

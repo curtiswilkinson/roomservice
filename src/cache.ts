@@ -10,17 +10,18 @@ const generateCachePath = (buildPath: string): string => {
   return constants.cacheBasePath + name
 }
 
-const shouldBuildService = (buildPath: string): Promise<boolean> => {
+const shouldBuild = (buildPath: string): Promise<boolean> => {
   const cachePath = generateCachePath(buildPath)
 
   return new Promise((resolve, reject) => {
+    // If there is no existing cache path, don't bother running find
     if (!fs.existsSync(cachePath)) {
       return resolve(true)
     }
 
     cli.exec(
       `find ${path.resolve(buildPath)} -cnewer ${cachePath}`,
-      newerFiles => resolve(newerFiles[0] !== '')
+      newerFiles => resolve(newerFiles[0] !== '') // find will return a single empty string upon no results
     )
   })
 }
@@ -28,10 +29,13 @@ const shouldBuildService = (buildPath: string): Promise<boolean> => {
 const write = async (buildPath: string): Promise<void> => {
   const cachePath = generateCachePath(buildPath)
 
+  // If there is no cache directory already, create that to avoid an error
   if (!fs.existsSync(constants.cacheBasePath)) {
     await fs.mkdir(constants.cacheBasePath)
   }
+
+  // Write an empty string onto the file to update timestamp (or create)
   return fs.writeFile(cachePath, '')
 }
 
-export default { shouldBuildService, write }
+export default { shouldBuild, write }

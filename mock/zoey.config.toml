@@ -1,7 +1,7 @@
 [service.main]
 build="echo main"
-path="./"
+path="./main/"
 
 [service.secondary]
 build="echo secondary"
-path="./"
+path="./secondary/"
