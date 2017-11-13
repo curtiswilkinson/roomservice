@@ -1,7 +1,7 @@
 [service.main]
-build="tsc ./index.ts"
+build="node ./index.js"
 path="./main/"
 
 [service.secondary]
-build="tsc ./index.ts"
+build="node ./index.js"
 path="./secondary/"
