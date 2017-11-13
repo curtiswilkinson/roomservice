@@ -10,7 +10,7 @@ const generateCachePath = (buildPath: string): string => {
   return constants.cacheBasePath + name
 }
 
-const _shouldBuild = (getCachePath: (str: string) => string) => (
+export const _shouldBuild = (getCachePath: (str: string) => string) => (
   buildPath: string
 ): Promise<boolean> => {
   const cachePath = getCachePath(buildPath)
@@ -18,6 +18,7 @@ const _shouldBuild = (getCachePath: (str: string) => string) => (
   return new Promise((resolve, reject) => {
     // If there is no existing cache path, don't bother running find
     if (!fs.existsSync(cachePath)) {
+      console.log('no cache')
       return resolve(true)
     }
 
@@ -28,7 +29,7 @@ const _shouldBuild = (getCachePath: (str: string) => string) => (
   })
 }
 
-const _write = (
+export const _write = (
   getCachePath: (str: string) => string,
   basePath = constants.cacheBasePath
 ) => async (buildPath: string): Promise<void> => {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "build": "tsc"
   },
   "bin": {
@@ -13,6 +14,7 @@
   "author": "Curtis Wilkinson",
   "license": "MIT",
   "dependencies": {
+    "@types/rimraf": "^2.0.2",
     "cli": "^1.0.1",
     "md5": "^2.2.1",
     "mz": "^2.7.0",
@@ -20,9 +22,25 @@
   },
   "devDependencies": {
     "@types/cli": "^0.11.19",
+    "@types/jest": "^21.1.6",
     "@types/md5": "^2.1.32",
     "@types/mz": "^0.0.32",
+    "jest": "^21.2.1",
     "prettier": "^1.8.2",
+    "rimraf": "^2.6.2",
     "typescript": "^2.6.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
+    },
+    "testMatch": [
+      "**/src/*.spec.(ts|tsx|js)"
+    ]
   }
 }
