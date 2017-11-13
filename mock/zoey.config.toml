@@ -1,5 +1,5 @@
 [service.main]
-build="node ./index.js"
+build="sleep 10"
 path="./main/"
 
 [service.secondary]
