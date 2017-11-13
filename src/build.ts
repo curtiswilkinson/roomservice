@@ -33,14 +33,13 @@ const buildService = (options: any, results: Results) => async (
 
   // spawn the build process
   return child_process
-    .exec(config.build)
+    .exec(config.build, { cwd: path.join(process.cwd(), fullPath)})
     .then(() => {
       Cache.write(fullPath)
       return results.built.push(name)
     })
     .catch(error => {
-      results.error.push(name)
-      console.log(error.message)
+      return results.error.push(name)
     })
 }
 

@@ -1,7 +1,7 @@
 [service.main]
-build="echo main"
+build="tsc ./index.ts"
 path="./main/"
 
 [service.secondary]
-build="echo secondary"
+build="tsc ./index.ts"
 path="./secondary/"
