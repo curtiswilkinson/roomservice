@@ -21,12 +21,12 @@ const init = (config: Config, options: Options) => {
   const spinner = Spinner(buildText())
 
   // Parallel build, but wait for all to finished before processing results
-  Promise.all(services.map(buildService(options, results, spinner))).then(
-    () => {
-      // console.log(results)
-      spinner.succeed(resultText(results))
-    }
-  )
+  return Promise.all(
+    services.map(buildService(options, results, spinner))
+  ).then(() => {
+    // console.log(results)
+    spinner.succeed(resultText(results))
+  })
 }
 
 const buildService = (options: any, results: Results, spinner: any) => async (
