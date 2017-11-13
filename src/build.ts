@@ -18,7 +18,7 @@ const init = (config: Config, options: Options) => {
 
   const services = Object.entries(config.service)
 
-  const spinner = Spinner(buildText()).start()
+  const spinner = Spinner(buildText())
 
   // Parallel build, but wait for all to finished before processing results
   Promise.all(services.map(buildService(options, results, spinner))).then(
