@@ -24,16 +24,15 @@ const buildService = (options: any, results: Results) => async (
   [name, config]: any
 ): Promise<any> => {
   const fullPath = path.join(options.config, config.path)
-  const shouldBuild = await Cache.shouldBuild(fullPath)
 
   // If the cache is still valid, and the no-cache option is NOT provided, bail
-  if (!shouldBuild && !options['no-cache']) {
+  if (options['no-cache'] && !await Cache.shouldBuild(fullPath)) {
     return results.cache.push(name)
   }
 
   // spawn the build process
   return child_process
-    .exec(config.build, { cwd: path.join(process.cwd(), fullPath)})
+    .exec(config.build, { cwd: path.join(process.cwd(), fullPath) })
     .then(() => {
       Cache.write(fullPath)
       return results.built.push(name)

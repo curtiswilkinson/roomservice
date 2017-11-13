@@ -18,7 +18,6 @@ export const _shouldBuild = (getCachePath: (str: string) => string) => (
   return new Promise((resolve, reject) => {
     // If there is no existing cache path, don't bother running find
     if (!fs.existsSync(cachePath)) {
-      console.log('no cache')
       return resolve(true)
     }
 
