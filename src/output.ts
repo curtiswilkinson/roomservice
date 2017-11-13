@@ -9,17 +9,18 @@ export const loadingText = (text: string) =>
   })
 
 export const resultText = (results: Results): string => {
-  let text = 'Hey Friend, all done!\n'
+  let text = 'Hey Friend, all done!\n\n'
 
   if (results.built.length) {
     text += '\nLooks like these changed so I built them for you: '
     results.built.forEach(
       (name: string) => (text += '\n - ' + chalk.bold.green(name))
     )
+    text += '\n'
   }
 
   if (results.cache.length) {
-    text += "\n\nI noticed that these haven't changed since I last looked: "
+    text += "\nI noticed that these haven't changed since I last looked: "
     results.cache.forEach(
       (name: string) => (text += '\n - ' + chalk.bold.cyan(name))
     )
