@@ -1,0 +1,9 @@
+[before]
+run="echo before"
+
+[service.Main]
+path="./"
+build="yarn build"
+
+[after]
+run="echo before"
