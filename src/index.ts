@@ -2,6 +2,7 @@
 import * as cli from 'cli'
 import Config from './config'
 import Build from './build'
+import Init from './init'
 
 export interface Options {
   init: boolean
@@ -23,8 +24,7 @@ const main = async () => {
   })
 
   if (options.init) {
-    console.log('too lazy for init atm')
-    return
+    return Init(options.project)
   }
 
   const config = await Config.parse(options.project)
