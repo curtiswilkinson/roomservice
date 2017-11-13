@@ -1,5 +1,6 @@
 import { child_process } from 'mz'
 import { Config } from './config'
+import { Options } from './'
 import Cache from './cache'
 import * as path from 'path'
 
@@ -9,7 +10,7 @@ interface Results {
   error: string[]
 }
 
-const init = (config: Config, options: any) => {
+const init = (config: Config, options: Options) => {
   const results: Results = { built: [], cache: [], error: [] }
 
   const services = Object.entries(config.service)
@@ -23,7 +24,7 @@ const init = (config: Config, options: any) => {
 const buildService = (options: any, results: Results) => async (
   [name, config]: any
 ): Promise<any> => {
-  const fullPath = path.join(options.config, config.path)
+  const fullPath = path.join(options.project, config.path)
 
   // If the cache is still valid, and the no-cache option is NOT provided, bail
   if (options['no-cache'] && !await Cache.shouldBuild(fullPath)) {
