@@ -22,7 +22,7 @@ const getFriendlyTime = (): string => {
     return 'morning'
   }
 
-  if (hour < 6) {
+  if (hour < 18) {
     return 'afternoon'
   }
 
