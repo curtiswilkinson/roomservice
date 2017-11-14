@@ -1,5 +1,5 @@
 {
-  "name": "zoey-cli",
+  "name": "roomservice",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "build": "tsc"
   },
   "bin": {
-    "zoey": "./build/index.js"
+    "roomservice": "./build/index.js"
   },
   "author": "Curtis Wilkinson",
   "license": "MIT",

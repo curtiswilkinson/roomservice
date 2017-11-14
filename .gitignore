@@ -3,3 +3,5 @@ dist
 mock/**/*.js
 build
 .projectile
+#*
+package-lock.json
