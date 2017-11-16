@@ -1,55 +1,68 @@
 import * as path from 'path'
 import { child_process } from 'mz'
-import { Config } from './config'
-
+import { Config, Service } from './config'
 import { Options } from './index'
 import Cache from './cache'
 
 import { Spinner, buildText, resultText } from './output'
 
-export interface Results {
-  built: string[]
-  cache: string[]
-  error: string[]
+interface Queue {
+	run: string[]
+	runBeforeSync: string[]
+	runSync: string[]
+	runAfterSync: string[]
 }
 
-const init = (config: Config, options: Options) => {
-  const results: Results = { built: [], cache: [], error: [] }
+const init = async (config: Config, options: Options) => {
+	const spinner = Spinner(buildText())
+	const queue = buildQueue(config, options)
 
-  const services = Object.entries(config.service)
+	// run
+	queue.run.forEach(console.log)
 
-  const spinner = Spinner(buildText())
+	// runBeforeSync
+	await Promise.all(queue.runBeforeSync.map(console.log))
 
-  // Parallel build, but wait for all to finished before processing results
-  return Promise.all(
-    services.map(buildService(options, results, spinner))
-  ).then(() => {
-    // console.log(results)
-    spinner.succeed(resultText(results))
-  })
+	// runSync
+	for (let name of queue.runSync) {
+		await console.log(name)
+	}
+
+	// runAfterSync
+	await Promise.all(queue.runAfterSync.map(console.log))
 }
 
-const buildService = (options: any, results: Results, spinner: any) => async (
-  [name, config]: any
-): Promise<any> => {
-  const fullPath = path.join(options.project, config.path)
+const buildQueue = (config: Config, options: Options): Queue => {
+	const serviceNames = Object.keys(config.service)
 
-  // If the cache is still valid, and the no-cache option is NOT provided, bail
-  if (!options['no-cache'] && !await Cache.shouldBuild(fullPath)) {
-    return results.cache.push(name)
-  }
+	return serviceNames.reduce(
+		(queue: Queue, name: string) => {
+			const service: Service = config.service[name] as Service
 
-  // spawn the build process
-  return child_process
-    .exec(config.build, { cwd: path.join(process.cwd(), fullPath) })
-    .then(() => {
-      Cache.write(fullPath)
-      return results.built.push(name)
-    })
-    .catch(error => {
-      console.log(error)
-      return results.error.push(name)
-    })
+			if (options['no-cache'] || Cache.shouldBuild(service.path)) {
+				queue.run.push(name)
+				if (service.run) {
+					queue.run.push(name)
+				}
+				if (service.runBeforeSync) {
+					queue.runBeforeSync.push(name)
+				}
+				if (service.runSync) {
+					queue.runSync.push(name)
+				}
+				if (service.runAfterSync) {
+					queue.runAfterSync.push(name)
+				}
+			}
+			return queue
+		},
+		{
+			run: [],
+			runBeforeSync: [],
+			runSync: [],
+			runAfterSync: []
+		}
+	)
 }
 
 export default { init }
