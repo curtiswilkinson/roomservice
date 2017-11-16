@@ -14,7 +14,7 @@ const run = (options: any) => async (
 	return child_process
 		.exec(command, {
 			cwd: path.join(process.cwd(), fullPath),
-			maxBuffer: 1024 * 1000
+			maxBuffer: 1024 * 10
 		})
 		.catch(error => {
 			throw error
