@@ -1,6 +1,6 @@
 import * as ora from 'ora'
 import * as chalk from 'chalk'
-import { Results } from './build'
+// import { Results } from './build'
 
 export const Spinner = (text: string) => {
   const spinner = new ora({
@@ -29,10 +29,13 @@ const getFriendlyTime = (): string => {
   return 'evening'
 }
 
-export const buildText = () =>
-  chalk.bold(`Good ${getFriendlyTime()}! Just building your services...`)
+export const buildText = (queue: any) =>
+  chalk.bold(
+    `Good ${getFriendlyTime()}! Just servicing your rooms: ` +
+      roomsToBeBuilt(queue)
+  )
 
-export const resultText = (results: Results): string => {
+export const resultText = (results: any): string => {
   let text = chalk.bold('Okay friend, all done!\n')
 
   if (results.built.length) {
@@ -55,5 +58,26 @@ export const resultText = (results: Results): string => {
       '!'
   }
 
+  if (results.errored.length) {
+    text += '\nI encountered an error while I was looking at these: '
+
+    results.errored.forEach(
+      (name: string) => (text += '\n - ' + chalk.bold.red(name))
+    )
+    text +=
+      '\nIf I was you, I would go run the build commands you provided in the room and see what happens!'
+  }
+
   return text
+}
+
+const roomsToBeBuilt = (queue: any): string[] => {
+  const set: Set<string> = Object.keys(queue).reduce((acc, hook: any) => {
+    const rooms: any = queue[hook]
+
+    rooms.forEach((room: string) => acc.add(room))
+    return acc
+  }, new Set())
+
+  return Array.from(set)
 }

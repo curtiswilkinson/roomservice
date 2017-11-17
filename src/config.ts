@@ -1,19 +1,19 @@
 const toml = require('toml')
 import * as fs from 'mz/fs'
 
-export interface Service {
+export interface Room {
 	// LifeCycle
 	run?: string
-	runBeforeSync?: string
+	beforeService?: string
 	runSync?: string
-	runAfterSync?: string
+	afterService?: string
 
 	// Other
 	path: string
 }
 
 export interface Config {
-	service: Service[]
+	room: Room[]
 }
 
 const parse = (path: string): Promise<any> =>

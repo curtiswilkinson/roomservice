@@ -1,7 +1,7 @@
-[service.main]
-build="sleep 10"
+[room.main]
+runSync="sleep 10"
 path="./main/"
 
-[service.secondary]
-build="node ./index.js"
+[room.secondary]
+runSync="slecccccep 10"
 path="./secondary/"
