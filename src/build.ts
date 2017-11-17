@@ -2,21 +2,15 @@ import * as path from 'path'
 import { child_process } from 'mz'
 import { Config, Room } from './config'
 import { Options } from './index'
-import Cache from './cache'
 
+import Queue from './queue'
+import Cache from './cache'
 import Service from './service'
 
 import { Spinner, buildText, resultText } from './output'
 
-interface Queue {
-  run: string[]
-  beforeService: string[]
-  runSync: string[]
-  afterService: string[]
-}
-
-const init = async (config: Config, options: Options) => {
-  const queue = buildQueue(config, options)
+export default async (config: Config, options: Options) => {
+  const queue = Queue.build(config, options)
   const spinner = Spinner(buildText(queue))
 
   const result: any = { built: [], cache: [], errored: [] }
@@ -60,40 +54,5 @@ const init = async (config: Config, options: Options) => {
     })
   )
 
-  spinner.succeed(resultText(result))
-  process.exit(1)
+  return spinner.succeed(resultText(result))
 }
-
-const buildQueue = (config: Config, options: Options): Queue => {
-  const roomNames = Object.keys(config.room)
-
-  return roomNames.reduce(
-    (queue: Queue, name: any) => {
-      const room: Room = config.room[name] as Room
-
-      if (options['no-cache'] || Cache.shouldBuild(room.path)) {
-        if (room.run) {
-          queue.run.push(name)
-        }
-        if (room.beforeService) {
-          queue.beforeService.push(name)
-        }
-        if (room.runSync) {
-          queue.runSync.push(name)
-        }
-        if (room.afterService) {
-          queue.afterService.push(name)
-        }
-      }
-      return queue
-    },
-    {
-      run: [],
-      beforeService: [],
-      runSync: [],
-      afterService: []
-    }
-  )
-}
-
-export default { init }

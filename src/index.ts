@@ -29,7 +29,7 @@ const main = async () => {
 
   const config = await Config.parse(options.project)
 
-  await Build.init(config, options)
+  await Build(config, options)
   process.exit(1)
 }
 
