@@ -44,7 +44,7 @@ const main = async () => {
   }
 
   await Build(config, options)
-  process.exit(1)
+  process.exit(0)
 }
 
 main()
