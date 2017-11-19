@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as chalk from 'chalk'
 import { child_process } from 'mz'
 
 import * as Config from './config'
@@ -16,12 +17,16 @@ export default async (config: Config.Config, options: Options) => {
   const result: any = { built: [], cache: queue.cache, errored: [] }
 
   // run
-  queue.run.forEach(name => {
-    const room: Config.Room = config.room[name as any]
-    Room.service(name, room.path, room.run)
-      .then(() => result.built.push(name))
-      .catch(result.errored.push(name))
-  })
+  Promise.all(
+    queue.run.map(name => {
+      const room: Config.Room = config.room[name as any]
+      Room.service(name, room.path, room.run)
+        .then(() => result.built.push(name))
+        .catch(() => result.errored.push(name))
+    })
+  )
+
+  spinner.text = chalk.bold('Running beforeService...')
 
   // beforeService
   await Promise.all(
@@ -29,9 +34,11 @@ export default async (config: Config.Config, options: Options) => {
       const room: Config.Room = config.room[name as any]
       return Room.service(name, room.path, room.beforeService)
         .then(() => result.built.push(name))
-        .catch(result.errored.push(name))
+        .catch(() => result.errored.push(name))
     })
   )
+
+  spinner.text = chalk.bold('Running runSync...')
 
   // runSync
   for (let name of queue.runSync) {
@@ -44,6 +51,7 @@ export default async (config: Config.Config, options: Options) => {
     }
   }
 
+  spinner.text = chalk.bold('Runing afterService...')
   // afterService
   await Promise.all(
     queue.afterService.map(name => {
@@ -53,6 +61,8 @@ export default async (config: Config.Config, options: Options) => {
         .catch(() => result.errored.push(name))
     })
   )
+
+  result.built.forEach((name: string) => Cache.write(config.room[name].path))
 
   return spinner.succeed(resultText(result))
 }
