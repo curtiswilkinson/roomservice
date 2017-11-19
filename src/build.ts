@@ -10,10 +10,10 @@ import Room from './room'
 import { Spinner, buildText, resultText } from './output'
 
 export default async (config: Config.Config, options: Options) => {
-  const queue = Queue.build(config, options)
+  const queue = await Queue.build(config, options)
   const spinner = Spinner(buildText(queue))
 
-  const result: any = { built: [], cache: [], errored: [] }
+  const result: any = { built: [], cache: queue.cache, errored: [] }
 
   // run
   queue.run.forEach(name => {

@@ -8,6 +8,7 @@ export interface Options {
   init?: boolean
   project?: string
   index?: boolean
+  verbose?: boolean
   'no-cache'?: boolean
 }
 

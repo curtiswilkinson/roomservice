@@ -1,7 +1,7 @@
 import Queue from './queue'
 
 describe('Queue', () => {
-	describe('build', () => {
+	describe('build', async () => {
 		test('Maps a room to a queue correctly', () => {
 			const config = {
 				room: {
@@ -15,7 +15,7 @@ describe('Queue', () => {
 				}
 			}
 
-			const result = Queue.build(config, { 'no-cache': true })
+			const result = await Queue.build(config, { 'no-cache': true })
 			const expected = {
 				run: ['test'],
 				beforeService: ['test'],

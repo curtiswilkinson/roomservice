@@ -20,8 +20,8 @@ export interface Config {
 	}
 }
 
-const parse = (path: string, options: Options): Promise<any> =>
-	fs.readFile(path + 'roomservice.config.toml').then(toml.parse)
+const parse = (roomPath: string, options: Options): Promise<any> =>
+	fs.readFile(path.join(roomPath, 'roomservice.config.toml')).then(toml.parse)
 
 const normalise = (config: Config, options: Options): Config => {
 	const normalisedRooms = Object.keys(config.room).reduce(

@@ -1,5 +1,4 @@
 import { child_process } from 'mz'
-import * as path from 'path'
 import Cache from './cache'
 
 import { Room } from './config'
@@ -12,10 +11,13 @@ const service = async (
 	// spawn the build process
 	return child_process
 		.exec(command, {
-			cwd: path.join(buildPath),
+			cwd: buildPath,
 			maxBuffer: 1024 * 10
 		})
-		.then(() => Cache.write(buildPath))
+		.then(() => {
+			console.log('Writing cache')
+			Cache.write(buildPath)
+		})
 		.catch(e => {
 			throw e
 		})
