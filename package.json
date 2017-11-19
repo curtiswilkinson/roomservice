@@ -1,6 +1,6 @@
 {
   "name": "roomservice",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A simple, friendly build tool that tries to be lazy about what it does to save you time",
   "main": "index.js",
   "scripts": {
