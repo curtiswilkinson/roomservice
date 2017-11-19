@@ -17,17 +17,11 @@ const build = (config: Config, options: Options): Queue => {
 			const room: Room = config.room[name] as Room
 
 			if (options['no-cache'] || Cache.shouldBuild(room.path)) {
-				if (room.run) {
-					queue.run.push(name)
-				}
-				if (room.beforeService) {
-					queue.beforeService.push(name)
-				}
-				if (room.runSync) {
-					queue.runSync.push(name)
-				}
-				if (room.afterService) {
-					queue.afterService.push(name)
+				for (const hook in room) {
+					const hookQueue = (queue as any)[hook]
+					if (hookQueue) {
+						hookQueue.push(name)
+					}
 				}
 			}
 			return queue

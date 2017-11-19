@@ -5,10 +5,10 @@ import Build from './build'
 import Init from './init'
 
 export interface Options {
-  init: boolean
-  project: string
-  index: boolean
-  'no-cache': boolean
+  init?: boolean
+  project?: string
+  index?: boolean
+  'no-cache'?: boolean
 }
 
 const main = async () => {
@@ -27,7 +27,8 @@ const main = async () => {
     return Init(options.project)
   }
 
-  const config = await Config.parse(options.project)
+  const parsedConfig = await Config.parse(options.project, options)
+  const config = Config.normalise(parsedConfig, options)
 
   await Build(config, options)
   process.exit(1)

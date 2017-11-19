@@ -4,18 +4,15 @@ import Cache from './cache'
 
 import { Room } from './config'
 
-const run = async (
-	options: any,
+const service = async (
 	name: string,
 	buildPath: string,
 	command: string
 ): Promise<any> => {
-	const fullPath = path.join(options.project, buildPath)
-
 	// spawn the build process
 	return child_process
 		.exec(command, {
-			cwd: path.join(process.cwd(), fullPath),
+			cwd: path.join(buildPath),
 			maxBuffer: 1024 * 10
 		})
 		.then(() => Cache.write(buildPath))
@@ -24,4 +21,4 @@ const run = async (
 		})
 }
 
-export default { run }
+export default { service }
