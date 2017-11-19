@@ -1,8 +1,8 @@
-import Queue from './queue'
+import Queue, { Queue as QueueT } from './queue'
 
 describe('Queue', () => {
-	describe('build', async () => {
-		test('Maps a room to a queue correctly', () => {
+	describe('build', () => {
+		test('Maps a room to a queue correctly', async () => {
 			const config = {
 				room: {
 					test: {
@@ -16,11 +16,12 @@ describe('Queue', () => {
 			}
 
 			const result = await Queue.build(config, { 'no-cache': true })
-			const expected = {
+			const expected: QueueT = {
 				run: ['test'],
 				beforeService: ['test'],
 				runSync: ['test'],
-				afterService: ['test']
+				afterService: ['test'],
+				cache: []
 			}
 
 			expect(result).toEqual(expected)

@@ -2,7 +2,7 @@ import Cache from './cache'
 import { Config, Room } from './config'
 import { Options } from './index'
 
-interface Queue {
+export interface Queue {
 	run: string[]
 	beforeService: string[]
 	runSync: string[]
