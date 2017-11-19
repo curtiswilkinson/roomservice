@@ -3,4 +3,6 @@ dist
 build
 .projectile
 #*
+tmp/
+tmp2/
 package-lock.json
