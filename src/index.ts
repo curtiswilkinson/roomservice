@@ -31,7 +31,7 @@ const main = async () => {
   })
 
   if (options.init) {
-    return Init(options.project)
+    return await Init(options.project)
   }
 
   const parsedConfig = await Config.parse(options.project, options)

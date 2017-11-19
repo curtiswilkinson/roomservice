@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run test && npm build"
   },
   "bin": {
     "roomservice": "./build/index.js"
@@ -35,16 +36,10 @@
     "typescript": "^2.6.1"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
     },
-    "testMatch": [
-      "**/src/*.spec.(ts|tsx|js)"
-    ]
+    "testMatch": ["**/src/*.spec.(ts|tsx|js)"]
   }
 }
