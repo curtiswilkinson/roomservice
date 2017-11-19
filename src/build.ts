@@ -10,32 +10,26 @@ import Room from './room'
 
 import { Spinner, buildText, resultText } from './output'
 
+interface Results {
+  built: string[]
+  cache: string[]
+  errored: string[]
+}
+
 export default async (config: Config.Config, options: Options) => {
   const queue = await Queue.build(config, options)
   const spinner = Spinner(buildText(queue))
 
-  const result: any = { built: [], cache: queue.cache, errored: [] }
+  const results: Results = { built: [], cache: queue.cache, errored: [] }
 
   // run
-  Promise.all(
-    queue.run.map(name => {
-      const room: Config.Room = config.room[name as any]
-      Room.service(name, room.path, room.run)
-        .then(() => result.built.push(name))
-        .catch(() => result.errored.push(name))
-    })
-  )
+  Promise.all(queue.run.map(runHookAsync(config, results, 'run')))
 
   spinner.text = chalk.bold('Running beforeService...')
 
   // beforeService
   await Promise.all(
-    queue.beforeService.map(name => {
-      const room: Config.Room = config.room[name as any]
-      return Room.service(name, room.path, room.beforeService)
-        .then(() => result.built.push(name))
-        .catch(() => result.errored.push(name))
-    })
+    queue.beforeService.map(runHookAsync(config, results, 'beforeService'))
   )
 
   spinner.text = chalk.bold('Running runSync...')
@@ -45,24 +39,30 @@ export default async (config: Config.Config, options: Options) => {
     try {
       const room: Config.Room = config.room[name as any]
       await Room.service(name, room.path, room.runSync)
-      result.built.push(name)
+      results.built.push(name)
     } catch {
-      result.errored.push(name)
+      results.errored.push(name)
     }
   }
 
-  spinner.text = chalk.bold('Runing afterService...')
+  spinner.text = chalk.bold('Running afterService...')
+
   // afterService
   await Promise.all(
-    queue.afterService.map(name => {
-      const room: Config.Room = config.room[name as any]
-      return Room.service(name, room.path, room.afterService)
-        .then(() => result.built.push(name))
-        .catch(() => result.errored.push(name))
-    })
+    queue.afterService.map(runHookAsync(config, results, 'afterService'))
   )
 
-  result.built.forEach((name: string) => Cache.write(config.room[name].path))
+  // Update Caches
+  results.built.forEach((name: string) => Cache.write(config.room[name].path))
 
-  return spinner.succeed(resultText(result))
+  return spinner.succeed(resultText(results))
+}
+
+const runHookAsync = (config: Config.Config, result: any, hook: string) => (
+  name: string
+) => {
+  const room: any = config.room[name]
+  return Room.service(name, room.path, room[hook])
+    .then(() => result.built.push(name))
+    .catch(() => result.errored.push(name))
 }

@@ -17,11 +17,6 @@ const main = async () => {
   const options: Options = cli.parse({
     init: ['i', 'Initialise a default roomservice configuration file', 'bool'],
     project: ['p', 'Path to the roomservice configuration file', 'file', './'],
-    index: [
-      false,
-      'Place a project in cache to avoid an upfront full build',
-      'bool'
-    ],
     'cache-all': [
       false,
       'Forcefully cache all services, good for first installing roomservice',

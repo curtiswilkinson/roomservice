@@ -4,11 +4,8 @@ import * as fs from 'mz/fs'
 import * as path from 'path'
 import constants from './constants'
 
-const generateCachePath = (buildPath: string): string => {
-  const name = md5(buildPath)
-
-  return constants.cacheBasePath + name
-}
+const generateCachePath = (buildPath: string): string =>
+  constants.cacheBasePath + md5(buildPath)
 
 export const _shouldBuild = (getCachePath: (str: string) => string) => async (
   buildPath: string
@@ -23,9 +20,10 @@ export const _shouldBuild = (getCachePath: (str: string) => string) => async (
   return child_process
     .exec(`find ${buildPath} -cnewer ${cachePath}`)
     .then((thing: any) => {
-      return thing[0] !== ''
+      return thing[0] !== '' // find returns line breaks when it's empty
     })
     .catch(e => {
+      // if something is busted here, just return true so the room gets built anyway
       return true
     })
 }
