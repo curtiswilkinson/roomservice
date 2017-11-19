@@ -14,10 +14,6 @@ const service = async (
 			cwd: buildPath,
 			maxBuffer: 1024 * 10
 		})
-		.then(() => {
-			console.log('Writing cache')
-			Cache.write(buildPath)
-		})
 		.catch(e => {
 			throw e
 		})

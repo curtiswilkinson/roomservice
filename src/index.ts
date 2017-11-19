@@ -3,13 +3,14 @@ import * as cli from 'cli'
 import Config from './config'
 import Build from './build'
 import Init from './init'
+import Cache from './cache'
 
 export interface Options {
   init?: boolean
   project?: string
   index?: boolean
-  verbose?: boolean
   'no-cache'?: boolean
+  'cache-all'?: boolean
 }
 
 const main = async () => {
@@ -21,6 +22,11 @@ const main = async () => {
       'Place a project in cache to avoid an upfront full build',
       'bool'
     ],
+    'cache-all': [
+      false,
+      'Forcefully cache all services, good for first installing roomservice',
+      'bool'
+    ],
     'no-cache': [false, 'Build all services regardless of cache status', 'bool']
   })
 
@@ -30,6 +36,12 @@ const main = async () => {
 
   const parsedConfig = await Config.parse(options.project, options)
   const config = Config.normalise(parsedConfig, options)
+
+  if (options['cache-all']) {
+    return Object.keys(config.room).forEach(name => {
+      Cache.write(config.room[name].path)
+    })
+  }
 
   await Build(config, options)
   process.exit(1)
