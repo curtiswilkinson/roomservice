@@ -1,55 +1,58 @@
 import * as path from 'path'
 import { child_process } from 'mz'
-import { Config } from './config'
 
+import * as Config from './config'
 import { Options } from './index'
+import Queue from './queue'
 import Cache from './cache'
+import Room from './room'
 
 import { Spinner, buildText, resultText } from './output'
 
-export interface Results {
-  built: string[]
-  cache: string[]
-  error: string[]
-}
+export default async (config: Config.Config, options: Options) => {
+  const queue = await Queue.build(config, options)
+  const spinner = Spinner(buildText(queue))
 
-const init = (config: Config, options: Options) => {
-  const results: Results = { built: [], cache: [], error: [] }
+  const result: any = { built: [], cache: queue.cache, errored: [] }
 
-  const services = Object.entries(config.service)
-
-  const spinner = Spinner(buildText())
-
-  // Parallel build, but wait for all to finished before processing results
-  return Promise.all(
-    services.map(buildService(options, results, spinner))
-  ).then(() => {
-    // console.log(results)
-    spinner.succeed(resultText(results))
+  // run
+  queue.run.forEach(name => {
+    const room: Config.Room = config.room[name as any]
+    Room.service(name, room.path, room.run)
+      .then(() => result.built.push(name))
+      .catch(result.errored.push(name))
   })
-}
 
-const buildService = (options: any, results: Results, spinner: any) => async (
-  [name, config]: any
-): Promise<any> => {
-  const fullPath = path.join(options.project, config.path)
+  // beforeService
+  await Promise.all(
+    queue.beforeService.map(name => {
+      const room: Config.Room = config.room[name as any]
+      return Room.service(name, room.path, room.beforeService)
+        .then(() => result.built.push(name))
+        .catch(result.errored.push(name))
+    })
+  )
 
-  // If the cache is still valid, and the no-cache option is NOT provided, bail
-  if (!options['no-cache'] && !await Cache.shouldBuild(fullPath)) {
-    return results.cache.push(name)
+  // runSync
+  for (let name of queue.runSync) {
+    try {
+      const room: Config.Room = config.room[name as any]
+      await Room.service(name, room.path, room.runSync)
+      result.built.push(name)
+    } catch {
+      result.errored.push(name)
+    }
   }
 
-  // spawn the build process
-  return child_process
-    .exec(config.build, { cwd: path.join(process.cwd(), fullPath) })
-    .then(() => {
-      Cache.write(fullPath)
-      return results.built.push(name)
+  // afterService
+  await Promise.all(
+    queue.afterService.map(name => {
+      const room: Config.Room = config.room[name as any]
+      return Room.service(name, room.path, room.afterService)
+        .then(() => result.built.push(name))
+        .catch(() => result.errored.push(name))
     })
-    .catch(error => {
-      console.log(error)
-      return results.error.push(name)
-    })
-}
+  )
 
-export default { init }
+  return spinner.succeed(resultText(result))
+}

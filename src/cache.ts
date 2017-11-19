@@ -1,31 +1,33 @@
-import * as cli from 'cli'
+import { child_process } from 'mz'
 import * as md5 from 'md5'
 import * as fs from 'mz/fs'
 import * as path from 'path'
 import constants from './constants'
 
 const generateCachePath = (buildPath: string): string => {
-  const name = md5(path.resolve(buildPath))
+  const name = md5(buildPath)
 
   return constants.cacheBasePath + name
 }
 
-export const _shouldBuild = (getCachePath: (str: string) => string) => (
+export const _shouldBuild = (getCachePath: (str: string) => string) => async (
   buildPath: string
 ): Promise<boolean> => {
   const cachePath = getCachePath(buildPath)
 
-  return new Promise((resolve, reject) => {
-    // If there is no existing cache path, don't bother running find
-    if (!fs.existsSync(cachePath)) {
-      return resolve(true)
-    }
+  // If there is no existing cache path, don't bother running find
+  if (!fs.existsSync(cachePath)) {
+    return true
+  }
 
-    cli.exec(
-      `find ${path.resolve(buildPath)} -cnewer ${cachePath}`,
-      newerFiles => resolve(newerFiles[0] !== '') // find will return a single empty string upon no results
-    )
-  })
+  return child_process
+    .exec(`find ${buildPath} -cnewer ${cachePath}`)
+    .then((thing: any) => {
+      return thing[0] !== ''
+    })
+    .catch(e => {
+      return true
+    })
 }
 
 export const _write = (

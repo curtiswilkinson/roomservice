@@ -42,4 +42,8 @@ describe('Cache', () => {
       await rimraf('./tmp2', () => ({}))
     })
   })
+  afterAll(() => {
+    rimraf('./tmp', () => ({}))
+    rimraf('./tmp2', () => ({}))
+  })
 })

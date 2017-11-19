@@ -1,9 +1,8 @@
-[before]
-run="echo before"
+[rooms.core_portal]
+path="./services/core_portal/"
+runBeforeSync = "yarn build"
+runSync="docker-compose build"
+runAfterSync=""
 
-[service.Main]
-path="./"
-build="yarn build"
-
-[after]
-run="echo before"
+[rooms.core_graphql]
+path="./service/core_graphql"
