@@ -1,8 +1,9 @@
-[rooms.core_portal]
-path="./services/core_portal/"
+[rooms.application_one]
+path="./application_one"
 runBeforeSync = "yarn build"
 runSync="docker-compose build"
 runAfterSync=""
 
-[rooms.core_graphql]
-path="./service/core_graphql"
+[rooms.application_two]
+path="./application_two"
+run="./build.sh"
