@@ -40,18 +40,26 @@ export const noConfigText =
   chalk.green.bold('--project') +
   ' flag to let me know where I need to look!'
 
-export const buildText = (queue: any) =>
-  chalk.bold(
-    `Good ${getFriendlyTime()}! Just servicing your rooms: ` +
-      roomsToBeBuilt(queue)
-  ) + '\n'
+export const calculatingText = chalk.bold(
+  'Good ' +
+    getFriendlyTime() +
+    '! ' +
+    `I'm just figuring out which rooms I need to look at...\n`
+)
 
-export const resultText = (results: any): string => {
-  let text = chalk.bold('Okay friend, all done!\n')
+export const buildText = (queue: any) =>
+  chalk.bold(`Looks like these ones need building: `) +
+  roomsToBeBuilt(queue) +
+  '\n'
+
+export const resultText = (results: any, time: number): string => {
+  let text = chalk.bold(
+    `Okay friend, all done! It took me ${time} seconds to do everything\n`
+  )
 
   if (results.built.length) {
     text += '\nLooks like these changed so I built them for you: '
-    results.built.forEach(
+    new Set(results.built).forEach(
       (name: string) => (text += '\n - ' + chalk.bold.green(name))
     )
     text += '\n'
@@ -60,7 +68,7 @@ export const resultText = (results: any): string => {
   if (results.cache.length) {
     text += "\nI noticed that these haven't changed since I last looked: "
 
-    results.cache.forEach(
+    new Set(results.cache).forEach(
       (name: string) => (text += '\n - ' + chalk.bold.cyan(name))
     )
     text +=
@@ -72,7 +80,7 @@ export const resultText = (results: any): string => {
   if (results.errored.length) {
     text += '\nI encountered an error while I was looking at these: '
 
-    results.errored.forEach(
+    new Set(results.errored).forEach(
       (name: string) => (text += '\n - ' + chalk.bold.red(name))
     )
     text +=
@@ -82,7 +90,7 @@ export const resultText = (results: any): string => {
   return text
 }
 
-const roomsToBeBuilt = (queue: any): string[] => {
+const roomsToBeBuilt = (queue: any): string => {
   const set: Set<string> = Object.keys(queue).reduce((acc, hook: any) => {
     if (hook === 'cache') {
       return acc
@@ -94,5 +102,5 @@ const roomsToBeBuilt = (queue: any): string[] => {
     return acc
   }, new Set())
 
-  return Array.from(set)
+  return Array.from(set).join(', ')
 }

@@ -1,3 +1,4 @@
+import * as cli from 'cli'
 import * as path from 'path'
 import * as chalk from 'chalk'
 import { child_process } from 'mz'
@@ -8,7 +9,7 @@ import Queue from './queue'
 import Cache from './cache'
 import Room from './room'
 
-import { Spinner, buildText, resultText } from './output'
+import { Spinner, buildText, resultText, calculatingText } from './output'
 
 interface Results {
   built: string[]
@@ -17,7 +18,12 @@ interface Results {
 }
 
 export default async (config: Config.Config, options: Options) => {
+  console.log(calculatingText)
+  let timer = 0
+  const stopwatch = setInterval(() => timer++, 1000)
+
   const queue = await Queue.build(config, options)
+
   const spinner = Spinner(buildText(queue))
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
@@ -55,7 +61,8 @@ export default async (config: Config.Config, options: Options) => {
   // Update Caches
   results.built.forEach((name: string) => Cache.write(config.room[name].path))
 
-  return spinner.succeed(resultText(results))
+  clearInterval(stopwatch)
+  return spinner.succeed(resultText(results, timer))
 }
 
 const runHookAsync = (config: Config.Config, result: any, hook: string) => (
