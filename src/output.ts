@@ -41,10 +41,9 @@ export const noConfigText =
   ' flag to let me know where I need to look!'
 
 export const buildText = (queue: any) =>
-  chalk.bold(
-    `Good ${getFriendlyTime()}! Just servicing your rooms: ` +
-      roomsToBeBuilt(queue)
-  ) + '\n'
+  chalk.bold(`Good ${getFriendlyTime()}! Just servicing your rooms: `) +
+  roomsToBeBuilt(queue) +
+  '\n'
 
 export const resultText = (results: any): string => {
   let text = chalk.bold('Okay friend, all done!\n')
@@ -82,7 +81,7 @@ export const resultText = (results: any): string => {
   return text
 }
 
-const roomsToBeBuilt = (queue: any): string[] => {
+const roomsToBeBuilt = (queue: any): string => {
   const set: Set<string> = Object.keys(queue).reduce((acc, hook: any) => {
     if (hook === 'cache') {
       return acc
@@ -94,5 +93,5 @@ const roomsToBeBuilt = (queue: any): string[] => {
     return acc
   }, new Set())
 
-  return Array.from(set)
+  return Array.from(set).join(', ')
 }
