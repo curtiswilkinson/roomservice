@@ -51,7 +51,7 @@ export const resultText = (results: any): string => {
 
   if (results.built.length) {
     text += '\nLooks like these changed so I built them for you: '
-    results.built.forEach(
+    new Set(results.built).forEach(
       (name: string) => (text += '\n - ' + chalk.bold.green(name))
     )
     text += '\n'
@@ -60,7 +60,7 @@ export const resultText = (results: any): string => {
   if (results.cache.length) {
     text += "\nI noticed that these haven't changed since I last looked: "
 
-    results.cache.forEach(
+    new Set(results.cache).forEach(
       (name: string) => (text += '\n - ' + chalk.bold.cyan(name))
     )
     text +=
@@ -72,7 +72,7 @@ export const resultText = (results: any): string => {
   if (results.errored.length) {
     text += '\nI encountered an error while I was looking at these: '
 
-    results.errored.forEach(
+    new Set(results.errored).forEach(
       (name: string) => (text += '\n - ' + chalk.bold.red(name))
     )
     text +=
