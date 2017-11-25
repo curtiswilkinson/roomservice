@@ -41,16 +41,21 @@ export const noConfigText =
   ' flag to let me know where I need to look!'
 
 export const calculatingText = chalk.bold(
-  `I'm just figuring out which rooms need servicing...`
+  'Good ' +
+    getFriendlyTime() +
+    '! ' +
+    `I'm just figuring out which rooms I need to look at...\n`
 )
 
 export const buildText = (queue: any) =>
-  chalk.bold(`Good ${getFriendlyTime()}! Just servicing your rooms: `) +
+  chalk.bold(`Looks like these ones need building: `) +
   roomsToBeBuilt(queue) +
   '\n'
 
-export const resultText = (results: any): string => {
-  let text = chalk.bold('Okay friend, all done!\n')
+export const resultText = (results: any, time: number): string => {
+  let text = chalk.bold(
+    `Okay friend, all done! It took me ${time} seconds to do everything\n`
+  )
 
   if (results.built.length) {
     text += '\nLooks like these changed so I built them for you: '
