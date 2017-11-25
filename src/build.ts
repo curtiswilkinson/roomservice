@@ -8,7 +8,7 @@ import Queue from './queue'
 import Cache from './cache'
 import Room from './room'
 
-import { Spinner, buildText, resultText } from './output'
+import { Spinner, buildText, resultText, calculatingText } from './output'
 
 interface Results {
   built: string[]
@@ -17,8 +17,11 @@ interface Results {
 }
 
 export default async (config: Config.Config, options: Options) => {
+  const spinner = Spinner(calculatingText)
+
   const queue = await Queue.build(config, options)
-  const spinner = Spinner(buildText(queue))
+
+  spinner.text = buildText(queue)
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
 
