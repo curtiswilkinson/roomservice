@@ -40,7 +40,9 @@ export const noConfigText =
   chalk.green.bold('--project') +
   ' flag to let me know where I need to look!'
 
-export const calculatingText = chalk.bold('I'\'m just figuring out which rooms need servicing...')
+export const calculatingText = chalk.bold(
+  `I'm just figuring out which rooms need servicing...`
+)
 
 export const buildText = (queue: any) =>
   chalk.bold(`Good ${getFriendlyTime()}! Just servicing your rooms: `) +
