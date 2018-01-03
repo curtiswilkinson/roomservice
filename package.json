@@ -1,8 +1,7 @@
 {
   "name": "roomservice",
-  "version": "1.1.0",
-  "description":
-    "A simple, friendly build tool that tries to be lazy about what it does to save you time",
+  "version": "1.2.0",
+  "description": "A simple, friendly build tool that tries to be lazy about what it does to save you time",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -37,10 +36,16 @@
     "typescript": "^2.6.1"
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
     },
-    "testMatch": ["**/src/*.spec.(ts|tsx|js)"]
+    "testMatch": [
+      "**/src/*.spec.(ts|tsx|js)"
+    ]
   }
 }
