@@ -9,7 +9,9 @@ import Queue from './queue'
 import Cache from './cache'
 import Room from './room'
 
-import { Spinner, buildText, resultText, calculatingText } from './output'
+import Console from './console'
+
+import Text from './text'
 
 interface Results {
   built: string[]
@@ -18,30 +20,37 @@ interface Results {
 }
 
 export default async (config: Config.Config, options: Options) => {
-  console.log(calculatingText)
+  console.log(Text.calculating)
   let timer = 0
   const stopwatch = setInterval(() => timer++, 1000)
 
   const queue = await Queue.build(config, options)
 
-  const spinner = Spinner(buildText(queue))
+  Console.startBuild(Object.keys(config.room))
+  Console.updateRows(queue.cache, chalk.cyan.bold('Cached'))
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
 
   // run
   Promise.all(queue.run.map(runHookAsync(config, results, 'run')))
 
-  spinner.text = chalk.bold('Running beforeService...')
+  Console.updateRows(queue.beforeService, chalk.green.bold('beforeService...'))
 
   // beforeService
   await Promise.all(
     queue.beforeService.map(runHookAsync(config, results, 'beforeService'))
   )
 
+  Console.updateRows(
+    queue.runSync,
+    chalk.bold.yellow('In Queue...'),
+    chalk.bold.cyan('Waiting...')
+  )
+
   // runSync
   for (let name of queue.runSync) {
     try {
-      spinner.text = chalk.bold('Running ' + name + ':runSync...')
+      Console.updateRows([name], chalk.bold.green('runSync...'))
 
       const room: Config.Room = config.room[name as any]
       await Room.service(name, room.path, room.runSync)
@@ -51,7 +60,10 @@ export default async (config: Config.Config, options: Options) => {
     }
   }
 
-  spinner.text = chalk.bold('Running afterService...')
+  Console.updateRows(
+    queue.afterService,
+    chalk.bold.green('afterService...', chalk.bold.cyan('Waiting...'))
+  )
 
   // afterService
   await Promise.all(
@@ -62,7 +74,20 @@ export default async (config: Config.Config, options: Options) => {
   results.built.forEach((name: string) => Cache.write(config.room[name].path))
 
   clearInterval(stopwatch)
-  return spinner.succeed(resultText(results, timer))
+  Console.updateRows(results.built, chalk.bold.green('Finished!'))
+  Console.updateRows(results.errored, chalk.bold.red('Errored!'))
+
+  console.log(Text.doneWithTime(timer))
+
+  if (results.cache.length) {
+    console.log(Text.cache)
+  }
+
+  if (results.errored.length) {
+    console.log(Text.error)
+  }
+
+  return
 }
 
 const runHookAsync = (
