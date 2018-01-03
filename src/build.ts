@@ -38,16 +38,16 @@ export default async (config: Config.Config, options: Options) => {
     queue.beforeService.map(runHookAsync(config, results, 'beforeService'))
   )
 
-  spinner.text = chalk.bold('Running runSync...')
-
   // runSync
   for (let name of queue.runSync) {
     try {
+      spinner.text = chalk.bold('Running ' + name + ':runSync...')
+
       const room: Config.Room = config.room[name as any]
       await Room.service(name, room.path, room.runSync)
-      results.built.push(name)
+      pushSuccess(results, name)
     } catch {
-      results.errored.push(name)
+      pushError(results, name)
     }
   }
 
@@ -65,11 +65,24 @@ export default async (config: Config.Config, options: Options) => {
   return spinner.succeed(resultText(results, timer))
 }
 
-const runHookAsync = (config: Config.Config, result: any, hook: string) => (
-  name: string
-) => {
+const runHookAsync = (
+  config: Config.Config,
+  results: Results,
+  hook: string
+) => (name: string) => {
   const room: any = config.room[name]
   return Room.service(name, room.path, room[hook])
-    .then(() => result.built.push(name))
-    .catch(() => result.errored.push(name))
+    .then(() => pushSuccess(results, name))
+    .catch(() => pushError(results, name))
+}
+
+const pushError = (results: Results, name: string): void => {
+  results.errored.push(name)
+  results.built = results.built.filter(built => name !== built)
+}
+
+const pushSuccess = (results: Results, name: string): void => {
+  if (!results.errored.includes(name)) {
+    results.built.push(name)
+  }
 }
