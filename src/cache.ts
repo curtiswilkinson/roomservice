@@ -18,7 +18,7 @@ export const _shouldBuild = (getCachePath: (str: string) => string) => async (
   }
 
   return child_process
-    .exec(`find ${buildPath} -cnewer ${cachePath}`)
+    .exec(`find ${buildPath} -cnewer ${cachePath} ! -path 'node_modules'`)
     .then((thing: any) => {
       return thing[0] !== '' // find returns line breaks when it's empty
     })

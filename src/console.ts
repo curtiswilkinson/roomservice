@@ -12,19 +12,9 @@ const startBuild = (rooms: string[]) => {
 }
 
 let outputColumns: any = {}
-const updateRows = (
-  rooms: string[],
-  status: string,
-  alternateStatus = 'Waiting...'
-) => {
-  // default all to alternate status
-  Object.keys(outputColumns).forEach(room => {
-    if (rooms.includes(room)) {
-      outputColumns[room] = status
-    } else if (!outputColumns[room].includes('Cached')) {
-      // Use the alternate status, UNLESS it is flagged as cached
-      outputColumns[room] = alternateStatus
-    }
+const updateRows = (rooms: string[], status: string) => {
+  rooms.forEach(room => {
+    outputColumns[room] = status
   })
 
   logUpdate(

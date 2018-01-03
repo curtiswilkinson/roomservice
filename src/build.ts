@@ -10,7 +10,6 @@ import Cache from './cache'
 import Room from './room'
 
 import Console from './console'
-
 import Text from './text'
 
 interface Results {
@@ -41,11 +40,7 @@ export default async (config: Config.Config, options: Options) => {
     queue.beforeService.map(runHookAsync(config, results, 'beforeService'))
   )
 
-  Console.updateRows(
-    queue.runSync,
-    chalk.bold.yellow('In Queue...'),
-    chalk.bold.cyan('Waiting...')
-  )
+  Console.updateRows(queue.runSync, chalk.bold.yellow('In Queue...'))
 
   // runSync
   for (let name of queue.runSync) {
@@ -104,10 +99,12 @@ const runHookAsync = (
 const pushError = (results: Results, name: string): void => {
   results.errored.push(name)
   results.built = results.built.filter(built => name !== built)
+  Console.updateRows([name], chalk.red.bold('Errored!'))
 }
 
 const pushSuccess = (results: Results, name: string): void => {
   if (!results.errored.includes(name)) {
     results.built.push(name)
+    Console.updateRows([name], chalk.green.bold('Ready...'))
   }
 }
