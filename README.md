@@ -1,5 +1,7 @@
 # roomservice
 
+[![Build Status](https://travis-ci.org/curtiswilkinson/roomservice.svg?branch=master)](https://travis-ci.org/curtiswilkinson/roomservice)
+
 Roomservice is a small, friendly build tool that uses file system timestamps to
 determine if a "Room" needs to be built.
 
