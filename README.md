@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/curtiswilkinson/roomservice.svg?branch=master)](https://travis-ci.org/curtiswilkinson/roomservice)
+[![Coverage Status](https://coveralls.io/repos/github/curtiswilkinson/roomservice/badge.svg?branch=master)](https://coveralls.io/github/curtiswilkinson/roomservice?branch=master)
 
 # roomservice
 
