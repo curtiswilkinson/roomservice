@@ -21,9 +21,19 @@ export interface Config {
   }
 }
 
-const parse = (roomPath: string, options: Options): Promise<any> =>
+const buildPath = (configPath: string) =>
   fs
-    .readFile(path.join(roomPath, 'roomservice.config.toml'))
+    .lstat(configPath)
+    .then(
+      stats =>
+        stats.isFile()
+          ? configPath
+          : path.join(configPath, 'roomservice.config.toml')
+    )
+
+const readConfig = (configPath: string) =>
+  fs
+    .readFile(configPath)
     .then(toml.parse)
     .catch(error => {
       if (error.code === 'ENOENT') {
@@ -34,13 +44,22 @@ const parse = (roomPath: string, options: Options): Promise<any> =>
       process.exit(1)
     })
 
-const normalise = (config: Config, options: Options): Config => {
+const parse = (configPath: string, options: Options): Promise<any> =>
+  buildPath(configPath).then(readConfig)
+
+const findProjectRoot = (projectPath: string) =>
+  fs
+    .lstat(projectPath)
+    .then(stats => (stats.isFile() ? path.dirname(projectPath) : projectPath))
+
+const normalise = async (config: Config, options: Options): Promise<Config> => {
+  const projectRoot = await findProjectRoot(options.project)
   const normalisedRooms = Object.keys(config.room).reduce(
     (acc: { [index: string]: Room }, roomName) => {
       const room = config.room[roomName]
       acc[roomName] = {
         ...room,
-        path: path.resolve(path.join(options.project || '', room.path))
+        path: path.resolve(path.join(projectRoot || '', room.path))
       }
       return acc
     },
