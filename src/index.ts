@@ -40,7 +40,7 @@ const main = async () => {
     return await Init(options.project)
   }
 
-  const parsedConfig = await Config.parse(options.project, options)
+  const parsedConfig = await Config.parse(options.project)
   const config = await Config.normalise(parsedConfig, options)
 
   if (options['cache-all']) {

@@ -61,4 +61,16 @@ describe('Config', () => {
       expect(Object.keys(result.room).length).toBeGreaterThan(0)
     })
   })
+
+  describe('parse', () => {
+    test('it reads a config path and parses it', async () => {
+      const resultFromDir = await Config.parse('./mock')
+      const resultFromPath = await Config.parse(
+        './mock/roomservice.config.toml'
+      )
+
+      expect(Object.keys(resultFromDir.room).length).toBeGreaterThan(0)
+      expect(resultFromDir).toEqual(resultFromPath)
+    })
+  })
 })

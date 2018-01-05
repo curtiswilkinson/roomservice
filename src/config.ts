@@ -44,7 +44,7 @@ export const readConfig = (configPath: string): Promise<any> =>
       process.exit(1)
     })
 
-export const parse = (configPath: string, options: Options): Promise<any> =>
+export const parse = (configPath: string): Promise<any> =>
   buildPath(configPath).then(readConfig)
 
 export const findProjectRoot = (projectPath: string) => {
