@@ -10,6 +10,6 @@ describe('Init', () => {
         .then(stats => !!stats.isFile())
     ).toBe(true)
 
-    fs.unlink('./roomservice.config.toml')
+    await fs.unlink('./roomservice.config.toml')
   })
 })

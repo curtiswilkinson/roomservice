@@ -33,7 +33,10 @@ export default async (config: Config.Config, options: Options) => {
   // run
   Promise.all(queue.run.map(runHookAsync(config, results, 'run')))
 
-  Console.updateRows(queue.beforeService, chalk.green.bold('Running beforeService...'))
+  Console.updateRows(
+    queue.beforeService,
+    chalk.green.bold('Running beforeService...')
+  )
 
   // beforeService
   await Promise.all(
@@ -48,7 +51,7 @@ export default async (config: Config.Config, options: Options) => {
       Console.updateRows([name], chalk.bold.green('Running runSync...'))
 
       const room: Config.Room = config.room[name as any]
-      await Room.service(name, room.path, room.runSync)
+      await Room.service(room.path, room.runSync)
       pushSuccess(results, name)
     } catch {
       pushError(results, name)
@@ -91,7 +94,7 @@ const runHookAsync = (
   hook: string
 ) => (name: string) => {
   const room: any = config.room[name]
-  return Room.service(name, room.path, room[hook])
+  return Room.service(room.path, room[hook])
     .then(() => pushSuccess(results, name))
     .catch(() => pushError(results, name))
 }

@@ -42,7 +42,7 @@
   },
   "jest": {
     "collectCoverage": true,
-    "collectCoverageFrom": ["!src/{text|console}.ts", "src/**/*.ts"],
+    "collectCoverageFrom": ["!src/{text|console|index}.ts", "src/**/*.ts"],
     "moduleFileExtensions": ["ts", "tsx", "js"],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
