@@ -31,7 +31,7 @@ export const buildPath = (configPath: string) =>
           : path.join(configPath, 'roomservice.config.toml')
     )
 
-export const readConfig = (configPath: string) =>
+export const readConfig = (configPath: string): Promise<any> =>
   fs
     .readFile(configPath)
     .then(toml.parse)
