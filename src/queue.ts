@@ -22,7 +22,7 @@ const _build = (processArgs: string[]) => async (config: Config, options: Option
 		beforeService: [],
 		runSync: [],
 		afterService: [],
-		cache: []
+    cache: []
 	}
 
 	await Promise.all(

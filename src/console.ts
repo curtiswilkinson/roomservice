@@ -8,7 +8,7 @@ const startBuild = (rooms: string[]) => {
     return acc
   }, {})
 
-  updateRows(rooms, 'Ready...')
+  updateRows(rooms, chalk.bold.green('Ready'))
 }
 
 let outputColumns: any = {}

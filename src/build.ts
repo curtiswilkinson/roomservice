@@ -26,26 +26,26 @@ export default async (config: Config.Config, options: Options) => {
   const queue = await Queue.build(config, options)
 
   Console.startBuild(Object.keys(config.room))
-  Console.updateRows(queue.cache, chalk.cyan.bold('Cached'))
+  Console.updateRows(queue.cache, chalk.cyan.bold('No Change'))
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
 
   // run
   Promise.all(queue.run.map(runHookAsync(config, results, 'run')))
 
-  Console.updateRows(queue.beforeService, chalk.green.bold('beforeService...'))
+  Console.updateRows(queue.beforeService, chalk.green.bold('Running beforeService...'))
 
   // beforeService
   await Promise.all(
     queue.beforeService.map(runHookAsync(config, results, 'beforeService'))
   )
 
-  Console.updateRows(queue.runSync, chalk.bold.yellow('In Queue...'))
+  Console.updateRows(queue.runSync, chalk.bold.yellow('In Queue'))
 
   // runSync
   for (let name of queue.runSync) {
     try {
-      Console.updateRows([name], chalk.bold.green('runSync...'))
+      Console.updateRows([name], chalk.bold.green('Running runSync...'))
 
       const room: Config.Room = config.room[name as any]
       await Room.service(name, room.path, room.runSync)
@@ -57,7 +57,7 @@ export default async (config: Config.Config, options: Options) => {
 
   Console.updateRows(
     queue.afterService,
-    chalk.bold.green('afterService...', chalk.bold.cyan('Waiting...'))
+    chalk.bold.green('Running afterService...')
   )
 
   // afterService
@@ -69,8 +69,8 @@ export default async (config: Config.Config, options: Options) => {
   results.built.forEach((name: string) => Cache.write(config.room[name].path))
 
   clearInterval(stopwatch)
-  Console.updateRows(results.built, chalk.bold.green('Finished!'))
-  Console.updateRows(results.errored, chalk.bold.red('Errored!'))
+  Console.updateRows(results.built, chalk.bold.green('Finished'))
+  Console.updateRows(results.errored, chalk.bold.red('Errored'))
 
   console.log(Text.doneWithTime(timer))
 
@@ -99,12 +99,12 @@ const runHookAsync = (
 const pushError = (results: Results, name: string): void => {
   results.errored.push(name)
   results.built = results.built.filter(built => name !== built)
-  Console.updateRows([name], chalk.red.bold('Errored!'))
+  Console.updateRows([name], chalk.red.bold('Errored'))
 }
 
 const pushSuccess = (results: Results, name: string): void => {
   if (!results.errored.includes(name)) {
     results.built.push(name)
-    Console.updateRows([name], chalk.green.bold('Ready...'))
+    Console.updateRows([name], chalk.green.bold('Waiting...'))
   }
 }
