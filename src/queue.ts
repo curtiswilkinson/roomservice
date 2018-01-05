@@ -10,8 +10,12 @@ export interface Queue {
 	cache: string[]
 }
 
-const build = async (config: Config, options: Options): Promise<Queue> => {
-	const roomNames = Object.keys(config.room)
+const _build = (processArgs: string[]) => async (config: Config, options: Options): Promise<Queue> => {
+  let roomNames = Object.keys(config.room)
+
+  if (options.ignore) {
+    roomNames = roomNames.filter(name => !processArgs.includes(name))
+  }
 
 	const queue: Queue = {
 		run: [],
@@ -45,4 +49,6 @@ const build = async (config: Config, options: Options): Promise<Queue> => {
 	return queue
 }
 
-export default { build }
+const build = _build(process.argv)
+
+export default { build, _build }

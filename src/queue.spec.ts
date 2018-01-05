@@ -26,5 +26,17 @@ describe('Queue', () => {
 
       expect(result).toEqual(expected)
     })
+
+    test('It will not queue rooms that are provided in the ignore list', async () => {
+      const config = {
+        room: {
+          one: { path: '', beforeService: 'one '},
+          two: { path: '', beforeService: 'two'}
+        }
+      }
+
+      const result = await Queue._build(['one'])(config, { ignore: true })
+      expect(result.beforeService.length).toEqual(1)
+    })
   })
 })
