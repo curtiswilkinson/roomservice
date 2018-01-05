@@ -47,10 +47,15 @@ const readConfig = (configPath: string) =>
 const parse = (configPath: string, options: Options): Promise<any> =>
   buildPath(configPath).then(readConfig)
 
-const findProjectRoot = (projectPath: string) =>
-  fs
+const findProjectRoot = (projectPath: string) => {
+  if (!projectPath) {
+    return
+  }
+
+  return fs
     .lstat(projectPath)
     .then(stats => (stats.isFile() ? path.dirname(projectPath) : projectPath))
+}
 
 const normalise = async (config: Config, options: Options): Promise<Config> => {
   const projectRoot = await findProjectRoot(options.project)
