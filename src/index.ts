@@ -17,12 +17,13 @@ export interface Options {
 const main = async () => {
   const options: Options = cli.parse({
     init: ['i', 'Initialise a default roomservice configuration file', 'bool'],
-    project: ['p', 'Path to the roomservice configuration file', 'file', './'],
-    'cache-all': [
-      false,
-      'Forcefully cache all services, good for first installing roomservice',
-      'bool'
+    project: [
+      'p',
+      'Path to the roomservice configuration file, or a directory with the config inside',
+      'file',
+      './'
     ],
+    'cache-all': [false, 'Forcefully cache all services', 'bool'],
     'no-cache': [
       false,
       'Build all services regardless of cache status',
@@ -30,7 +31,7 @@ const main = async () => {
     ],
     ignore: [
       false,
-      'A list of rooms that will not be build, irrespective of cache status',
+      'A list of rooms that will not be ignored by the build',
       'bool'
     ]
   })
