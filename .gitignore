@@ -6,3 +6,4 @@ build
 tmp/
 tmp2/
 package-lock.json
+coverage

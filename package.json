@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "test-ci":
-      "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+      "jest && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test:watch": "jest --watch",
     "build": "tsc",
     "prepublishOnly": "npm run test && npm run build"
@@ -42,6 +42,7 @@
   },
   "jest": {
     "collectCoverage": true,
+    "collectCoverageFrom": ["!src/{text|console}.ts", "src/**/*.ts"],
     "moduleFileExtensions": ["ts", "tsx", "js"],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
