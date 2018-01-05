@@ -23,8 +23,16 @@ const main = async () => {
       'Forcefully cache all services, good for first installing roomservice',
       'bool'
     ],
-    'no-cache': [false, 'Build all services regardless of cache status', 'bool'],
-    ignore: [false, 'A list of rooms that will not be build, irrespective of cache status', 'bool']
+    'no-cache': [
+      false,
+      'Build all services regardless of cache status',
+      'bool'
+    ],
+    ignore: [
+      false,
+      'A list of rooms that will not be build, irrespective of cache status',
+      'bool'
+    ]
   })
 
   if (options.init) {
@@ -32,7 +40,7 @@ const main = async () => {
   }
 
   const parsedConfig = await Config.parse(options.project, options)
-  const config = Config.normalise(parsedConfig, options)
+  const config = await Config.normalise(parsedConfig, options)
 
   if (options['cache-all']) {
     return Object.keys(config.room).forEach(name => {

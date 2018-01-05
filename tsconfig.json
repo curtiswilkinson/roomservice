@@ -1,12 +1,19 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": ["es5", "es6", "es2017", "esnext"],
+    "lib": [
+      "es5",
+      "es6",
+      "es2017",
+      "esnext"
+    ],
     "target": "es6",
     "noImplicitAny": true,
     "outDir": "build",
     "rootDir": "src",
     "sourceMap": false
   },
-  "include": ["src/**/*.**"]
+  "include": [
+    "src/**/*.**"
+  ]
 }
