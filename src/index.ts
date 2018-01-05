@@ -11,6 +11,7 @@ export interface Options {
   index?: boolean
   'no-cache'?: boolean
   'cache-all'?: boolean
+  ignore?: boolean
 }
 
 const main = async () => {
@@ -22,7 +23,8 @@ const main = async () => {
       'Forcefully cache all services, good for first installing roomservice',
       'bool'
     ],
-    'no-cache': [false, 'Build all services regardless of cache status', 'bool']
+    'no-cache': [false, 'Build all services regardless of cache status', 'bool'],
+    ignore: [false, 'A list of rooms that will not be build, irrespective of cache status', 'bool']
   })
 
   if (options.init) {
