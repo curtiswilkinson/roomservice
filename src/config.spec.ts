@@ -1,7 +1,7 @@
-import Config from './config'
+import * as Config from './config'
 
 describe('Config', () => {
-  describe('normalise', () => {
+  describe('normalise()', () => {
     const config = {
       room: {
         main: {
@@ -35,6 +35,23 @@ describe('Config', () => {
       expect(result.room.secondary.path.includes('home')).toBe(true)
       expect(result.room.secondary.path.includes('roomservice')).toBe(true)
       expect(result.room.secondary.path.includes('/mock/secondary')).toBe(true)
+    })
+  })
+
+  describe('buildPath', () => {
+    test('it handles a path to a file', async () => {
+      const path = './mock/roomservice-secondary.config.toml'
+      expect(await Config.buildPath(path)).toBe(path)
+    })
+
+    test('it handles a path to a directory with no ending slash', async () => {
+      const path = './mock'
+      expect(await Config.buildPath(path)).toBe('mock/roomservice.config.toml')
+    })
+
+    test('it handles a path to a directory with an ending slash', async () => {
+      const path = './mock/'
+      expect(await Config.buildPath(path)).toBe('mock/roomservice.config.toml')
     })
   })
 })

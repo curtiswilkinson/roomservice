@@ -21,7 +21,7 @@ export interface Config {
   }
 }
 
-const buildPath = (configPath: string) =>
+export const buildPath = (configPath: string) =>
   fs
     .lstat(configPath)
     .then(
@@ -31,7 +31,7 @@ const buildPath = (configPath: string) =>
           : path.join(configPath, 'roomservice.config.toml')
     )
 
-const readConfig = (configPath: string) =>
+export const readConfig = (configPath: string) =>
   fs
     .readFile(configPath)
     .then(toml.parse)
@@ -44,10 +44,10 @@ const readConfig = (configPath: string) =>
       process.exit(1)
     })
 
-const parse = (configPath: string, options: Options): Promise<any> =>
+export const parse = (configPath: string, options: Options): Promise<any> =>
   buildPath(configPath).then(readConfig)
 
-const findProjectRoot = (projectPath: string) => {
+export const findProjectRoot = (projectPath: string) => {
   if (!projectPath) {
     return
   }
@@ -57,7 +57,10 @@ const findProjectRoot = (projectPath: string) => {
     .then(stats => (stats.isFile() ? path.dirname(projectPath) : projectPath))
 }
 
-const normalise = async (config: Config, options: Options): Promise<Config> => {
+export const normalise = async (
+  config: Config,
+  options: Options
+): Promise<Config> => {
   const projectRoot = await findProjectRoot(options.project)
   const normalisedRooms = Object.keys(config.room).reduce(
     (acc: { [index: string]: Room }, roomName) => {
