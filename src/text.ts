@@ -53,7 +53,8 @@ const status = {
   runParallel: chalk.bold.green('Run Synchronously...'),
   before: chalk.bold.green('Before...'),
   after: chalk.bold.green('After...'),
-  waiting: chalk.bold.yellow('Waiting')
+  waiting: chalk.bold.yellow('Waiting'),
+  finally: chalk.bold.green('Finally...')
 }
 
 export default {

@@ -6,10 +6,11 @@ import Text from './text'
 
 export interface Room {
   // LifeCycle
-  run?: string
-  beforeService?: string
-  runSync?: string
-  afterService?: string
+  runSynchronously?: string
+  before?: string
+  runParallel?: string
+  after?: string
+  finally?: string
 
   // Other
   path: string

@@ -38,6 +38,9 @@ const _build = (processArgs: string[]) => async (
       // Note to keep the flag check first, this saves checking cache validity if they've opted out
       if (!options['no-cache'] && !await Cache.shouldBuild(room.path)) {
         queue.cache.push(name)
+        if (room.finally) {
+          queue.finally.push(name)
+        }
       } else {
         // loop over the room config
         for (const hook in room) {

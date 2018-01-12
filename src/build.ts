@@ -65,6 +65,13 @@ export default async (config: Config.Config, options: Options) => {
     queue.after.map(runHookAsync(config, queue, results, 'after'))
   )
 
+  // finally
+  Console.updateRows(queue.finally, Text.status.finally)
+
+  await Promise.all(
+    queue.finally.map(runHookAsync(config, queue, results, 'finally'))
+  )
+
   // Update Caches
   results.built.forEach((name: string) => Cache.write(config.room[name].path))
 
