@@ -28,7 +28,7 @@ const calculating = chalk.bold(
   'Good ' +
     getFriendlyTime() +
     '! ' +
-    `I'm just figuring out which rooms I need to look at...\n`
+    `I'm just figuring out which rooms I need to look at...`
 )
 
 const error =
@@ -43,6 +43,15 @@ const doneWithTime = (time: any) =>
 const cache =
   "\nI noticed some rooms didn't change! If you need me to build them anyway, let me know with " +
   chalk.green.bold('--no-cache')
+
+const version = (version: string) => chalk.bold.grey('V' + version) + '\n'
+
+const newVersion = (currentVersion: string, newVersion: string) =>
+  chalk.grey(
+    `I've got a new update! I'm currently ${chalk.bold.yellow(
+      'V' + currentVersion
+    )}, but there is ${chalk.bold.green('V' + newVersion)}`
+  ) + '\n'
 
 const status = {
   finished: chalk.bold.green('Finished'),
@@ -63,5 +72,7 @@ export default {
   doneWithTime,
   error,
   cache,
-  status
+  status,
+  version,
+  newVersion
 }

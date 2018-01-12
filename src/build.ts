@@ -7,6 +7,7 @@ import { Options } from './index'
 import Queue, { Queue as QueueT } from './queue'
 import Cache from './cache'
 import Room from './room'
+import Version from './version'
 
 import Console from './console'
 import Text from './text'
@@ -21,6 +22,8 @@ export default async (config: Config.Config, options: Options) => {
   console.log(Text.calculating)
   let timer = 0
   const stopwatch = setInterval(() => timer++, 1000)
+
+  await Version.validate()
 
   const queue = await Queue.build(config, options)
 
