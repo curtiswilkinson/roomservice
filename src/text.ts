@@ -15,9 +15,7 @@ const getFriendlyTime = (): string => {
 
 export const noConfig =
   chalk.bold('Sorry! ') +
-  "I couldn't find a " +
-  chalk.cyan.bold('roomservice.config.toml') +
-  ' file here.\n\n' +
+  "I couldn't find a config file here.\n\n" +
   'Maybe you need to ' +
   chalk.yellow.bold('change directories') +
   ', or you can give me a ' +
@@ -28,7 +26,7 @@ const calculating = chalk.bold(
   'Good ' +
     getFriendlyTime() +
     '! ' +
-    `I'm just figuring out which rooms I need to look at...\n`
+    `I'm just figuring out which rooms I need to look at...`
 )
 
 const error =
@@ -44,10 +42,35 @@ const cache =
   "\nI noticed some rooms didn't change! If you need me to build them anyway, let me know with " +
   chalk.green.bold('--no-cache')
 
+const version = (version: string) => chalk.grey('V' + version) + '\n'
+
+const newVersion = (currentVersion: string, newVersion: string) =>
+  chalk.grey(
+    `I've got a new update! I'm currently ${chalk.bold.yellow(
+      'V' + currentVersion
+    )}, but there is ${chalk.bold.green('V' + newVersion)}`
+  ) + '\n'
+
+const status = {
+  finished: chalk.bold.green('Finished'),
+  error: chalk.bold.red('Error'),
+  cache: chalk.bold.cyan('No Change'),
+  queued: chalk.bold.yellow('In Queue'),
+  runSynchronous: chalk.bold.green('Run Synchronously...'),
+  runParallel: chalk.bold.green('Run Synchronously...'),
+  before: chalk.bold.green('Before...'),
+  after: chalk.bold.green('After...'),
+  waiting: chalk.bold.yellow('Waiting'),
+  finally: chalk.bold.green('Finally...')
+}
+
 export default {
   calculating,
   noConfig,
   doneWithTime,
   error,
-  cache
+  cache,
+  status,
+  version,
+  newVersion
 }

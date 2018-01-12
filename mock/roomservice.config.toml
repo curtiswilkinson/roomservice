@@ -1,7 +1,13 @@
-[room.main]
-runSync="sleep 10"
-path="./main/"
+[rooms.main]
+before = "sleep 5"
+runSynchronous = "sleep 10"
+after = "sleep 5"
+finally = "sleep 5"
+path = "./main/"
 
-[room.secondary]
-runSync="slecccccep 10"
-path="./secondary/"
+[rooms.secondary]
+before = "sleep 2"
+runSynchronous = "sleep 10"
+after = "sleep 2"
+finally = "sleep 7"
+path = "./secondary/"

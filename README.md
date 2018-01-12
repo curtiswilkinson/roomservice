@@ -4,7 +4,7 @@
 # roomservice
 
 Roomservice is a small, friendly build tool that uses file system timestamps to
-determine if a "Room" needs to be built.
+determine if a directory needs building, and build it according to the config.
 
 ## Use case
 
@@ -22,8 +22,8 @@ You can get started by running `npm i -g roomservice` to install roomservice
 globally on your computer.
 
 In the project that you'd like to use roomservice, you can run `roomservice
---init` and it will automatically create a template `roomservice.config.toml`
-for you.
+--init` and it will automatically create a template `roomservice.config.*` for
+you.
 
 If you are in a project that takes a considerable amount of time to build, and
 you know it's up-to-date, I would suggest running `roomservice --cache-all` to
@@ -32,15 +32,21 @@ to build everything to start benefiting from roomservice diffing your rooms.
 
 ## Config
 
-In roomservice config, a room configuration looks like this:
+Roomservice supports YAML, TOML & JSON formats, but the current encouraged
+default is YAML. The structure for other file formats is identical, to see some
+examples look in the `./mock` folder.
 
-```toml
-[room.name]
-path = "./path/to/watch/and/run/commands/in"
-run = "echo runs asynchronously"
-beforeService = "echo run asynchronously, but all must finish before continuing"
-runSync = "echo run synchronously, and all runSync hooks must finish before continuing"
-afterService = "echo run asynchronously, and all must complete before continuing"
+Here is what roomservice config looks like:
+
+```yaml
+rooms:
+  room_name:
+    path: ./path/to/watch/and/run/commands/in
+    before: 'runs before everything'
+    runParallel: 'runs in parallel with other rooms'
+    runSynchronous: 'runs synchronously with other rooms'
+    after: 'run after the run commands'
+    finally: 'ALWAYS runs last, regardless of directory changes'
 ```
 
 _Note:_ All commands are run in the `path` provided, adjust any relative paths
@@ -49,25 +55,34 @@ accordingly
 So for example, a project with two docker services might look like this to avoid
 the known speed issues with parallel container builds:
 
-```toml
-[room.api]
-path = "./api"
-beforeService = "yarn && yarn build"
-runSync = "docker-compose build api"
+```yaml
+rooms:
+  api:
+    path: ./api
+    before: yarn && yarn build
+    runSynchronously: docker-compose stop api && docker-compose build api
+    finally: docker-compose up -d api
 
-[room.client]
-path = "./client"
-beforeService = "yarn && yarn build"
-runSync = "docker-compose build client"
+  client:
+    path: ./client
+    before: yarn && yarn build
+    runSynchronously: docker-compose stop client && docker-compose build client
+    finally: docker-compose up -d client
 ```
 
 This would build as follows (assuming no roomservice cache saves you!):
 
-1. Both `beforeService` commands will start running at the same time
-2. Roomservice will wait for both `beforeService` commands to complete, then
-   move on
-3. Because the `runSync` command is synchronous, it will do one `docker-compose
-   build` first, then do the second
+1. Both `before` commands will start running at the same time
+2. Roomservice will wait for both `before` commands to complete, then move on
+3. Because the `runSynchronous` command is synchronous, it will do one
+   `docker-compose build` first, then do the second
+4. Lastly, the `finally` command will fire, calling `docker-compose up` on both
+   containers
+
+In the event that no files in either path had changed:
+
+1. Only the `finally` hooks would file, simply calling `docker-compose up` on
+   both containers
 
 ## CLI
 

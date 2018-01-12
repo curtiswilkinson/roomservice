@@ -1,0 +1,13 @@
+rooms:
+  main:
+    before: sleep 5
+    runSynchronous: sleep 10
+    after: sleep 5
+    finally: sleep 5
+    path: "./main/"
+  secondary:
+    before: sleep 2
+    runSynchronous: sleep 10
+    after: sleep 2
+    finally: sleep 7
+    path: "./secondary/"
