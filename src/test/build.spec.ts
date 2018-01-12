@@ -1,5 +1,5 @@
 import Build, { pushSuccess } from '../build'
-import Text from '../Text'
+import Text from '../text'
 import * as fs from 'mz/fs'
 import * as rimraf from 'rimraf'
 import { PassThrough } from 'stream'
