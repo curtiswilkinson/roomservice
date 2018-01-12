@@ -5,7 +5,7 @@ import * as rimraf from 'rimraf'
 describe('build', () => {
   test('runs commands appropriate for the given config', async () => {
     const config = {
-      room: {
+      rooms: {
         one: {
           path: '',
           before: 'mkdir one',

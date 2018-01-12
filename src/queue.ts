@@ -15,7 +15,7 @@ const _build = (processArgs: string[]) => async (
   config: Config,
   options: Options
 ): Promise<Queue> => {
-  let roomNames = Object.keys(config.room)
+  let roomNames = Object.keys(config.rooms)
 
   if (options.ignore) {
     roomNames = roomNames.filter(name => !processArgs.includes(name))
@@ -32,7 +32,7 @@ const _build = (processArgs: string[]) => async (
 
   await Promise.all(
     roomNames.map(async (name: string) => {
-      const room: Room = config.room[name] as Room
+      const room: Room = config.rooms[name] as Room
 
       // If no --no-cache flag, and the cache is still valid
       // Note to keep the flag check first, this saves checking cache validity if they've opted out

@@ -24,7 +24,7 @@ export default async (config: Config.Config, options: Options) => {
 
   const queue = await Queue.build(config, options)
 
-  Console.startBuild(Object.keys(config.room))
+  Console.startBuild(Object.keys(config.rooms))
   Console.updateRows(queue.cache, Text.status.cache)
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
@@ -50,7 +50,7 @@ export default async (config: Config.Config, options: Options) => {
     try {
       Console.updateRows([name], Text.status.runSynchronous)
 
-      const room: Config.Room = config.room[name as any]
+      const room: Config.Room = config.rooms[name as any]
       await Room.service(room.path, room.runSynchronous)
       pushSuccess(results, queue, name)
     } catch {
@@ -73,7 +73,7 @@ export default async (config: Config.Config, options: Options) => {
   )
 
   // Update Caches
-  results.built.forEach((name: string) => Cache.write(config.room[name].path))
+  results.built.forEach((name: string) => Cache.write(config.rooms[name].path))
 
   clearInterval(stopwatch)
   Console.updateRows(results.built, Text.status.finished)
@@ -98,7 +98,7 @@ const runHookAsync = (
   results: Results,
   hook: string
 ) => (name: string) => {
-  const room: any = config.room[name]
+  const room: any = config.rooms[name]
   return Room.service(room.path, room[hook])
     .then(() => pushSuccess(results, queue, name))
     .then(() => Queue.complete(queue, hook, name))

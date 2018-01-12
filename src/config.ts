@@ -17,7 +17,7 @@ export interface Room {
 }
 
 export interface Config {
-  room: {
+  rooms: {
     [index: string]: Room
   }
 }
@@ -63,9 +63,9 @@ export const normalise = async (
   options: Options
 ): Promise<Config> => {
   const projectRoot = await findProjectRoot(options.project)
-  const normalisedRooms = Object.keys(config.room).reduce(
+  const normalisedRooms = Object.keys(config.rooms).reduce(
     (acc: { [index: string]: Room }, roomName) => {
-      const room = config.room[roomName]
+      const room = config.rooms[roomName]
       acc[roomName] = {
         ...room,
         path: path.resolve(path.join(projectRoot || '', room.path))
@@ -77,7 +77,7 @@ export const normalise = async (
 
   return {
     ...config,
-    room: normalisedRooms
+    rooms: normalisedRooms
   }
 }
 

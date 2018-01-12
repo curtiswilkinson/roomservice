@@ -3,7 +3,7 @@ import * as Config from '../config'
 describe('Config', () => {
   describe('normalise()', () => {
     const config = {
-      room: {
+      rooms: {
         main: {
           path: './main'
         },
@@ -16,21 +16,21 @@ describe('Config', () => {
       const result = await Config.normalise(config, {})
 
       // This is really not great, need to figure out a better way to deal with path.resolve
-      expect(result.room.main.path.includes('roomservice')).toBe(true)
-      expect(result.room.main.path.includes('main')).toBe(true)
+      expect(result.rooms.main.path.includes('roomservice')).toBe(true)
+      expect(result.rooms.main.path.includes('main')).toBe(true)
 
-      expect(result.room.secondary.path.includes('roomservice')).toBe(true)
-      expect(result.room.secondary.path.includes('secondary')).toBe(true)
+      expect(result.rooms.secondary.path.includes('roomservice')).toBe(true)
+      expect(result.rooms.secondary.path.includes('secondary')).toBe(true)
     })
 
     test('normalises the paths with the config and options project path', async () => {
       const result = await Config.normalise(config, { project: './mock' })
 
-      expect(result.room.main.path.includes('roomservice')).toBe(true)
-      expect(result.room.main.path.includes('/mock/main')).toBe(true)
+      expect(result.rooms.main.path.includes('roomservice')).toBe(true)
+      expect(result.rooms.main.path.includes('/mock/main')).toBe(true)
 
-      expect(result.room.secondary.path.includes('roomservice')).toBe(true)
-      expect(result.room.secondary.path.includes('/mock/secondary')).toBe(true)
+      expect(result.rooms.secondary.path.includes('roomservice')).toBe(true)
+      expect(result.rooms.secondary.path.includes('/mock/secondary')).toBe(true)
     })
   })
 

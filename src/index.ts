@@ -44,8 +44,8 @@ const main = async () => {
   const config = await Config.normalise(parsedConfig, options)
 
   if (options['cache-all']) {
-    return Object.keys(config.room).forEach(name => {
-      Cache.write(config.room[name].path)
+    return Object.keys(config.rooms).forEach(name => {
+      Cache.write(config.rooms[name].path)
     })
   }
 

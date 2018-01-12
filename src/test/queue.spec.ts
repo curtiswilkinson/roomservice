@@ -4,7 +4,7 @@ describe('Queue', () => {
   describe('build()', () => {
     test('Maps a room to a queue correctly', async () => {
       const config = {
-        room: {
+        rooms: {
           test: {
             path: '',
             runParallel: 'runParallel',
@@ -31,7 +31,7 @@ describe('Queue', () => {
 
     test('It will not queue rooms that are provided in the ignore list', async () => {
       const config = {
-        room: {
+        rooms: {
           one: { path: '', before: 'one ' },
           two: { path: '', before: 'two' }
         }
