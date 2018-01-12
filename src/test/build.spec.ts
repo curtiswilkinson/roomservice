@@ -68,7 +68,6 @@ describe('build', () => {
 
       const result = pushSuccess(results, queue, 'runParallel', 'main')
       expect(result).toEqual(Text.status.finished)
-      console.log(results, queue, result)
     })
   })
   beforeAll(() => {
