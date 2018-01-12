@@ -26,15 +26,17 @@ describe.only('build', () => {
     }
     await Build(config, { 'no-cache': true })
 
-    fs.exists('./one/parallel').then(result => expect(result).toEqual(true))
-    fs.exists('./one/sync').then(result => expect(result).toEqual(true))
-    fs.exists('./one/after').then(result => expect(result).toEqual(true))
-    fs.exists('./one/finally').then(result => expect(result).toEqual(true))
+    return Promise.all([
+      fs.exists('./one/parallel').then(result => expect(result).toEqual(true)),
+      fs.exists('./one/sync').then(result => expect(result).toEqual(true)),
+      fs.exists('./one/after').then(result => expect(result).toEqual(true)),
+      fs.exists('./one/finally').then(result => expect(result).toEqual(true)),
 
-    fs.exists('./two/parallel').then(result => expect(result).toEqual(true))
-    fs.exists('./two/sync').then(result => expect(result).toEqual(true))
-    fs.exists('./two/after').then(result => expect(result).toEqual(true))
-    fs.exists('./two/finally').then(result => expect(result).toEqual(true))
+      fs.exists('./two/parallel').then(result => expect(result).toEqual(true)),
+      fs.exists('./two/sync').then(result => expect(result).toEqual(true)),
+      fs.exists('./two/after').then(result => expect(result).toEqual(true)),
+      fs.exists('./two/finally').then(result => expect(result).toEqual(true))
+    ])
   })
   afterAll(() => {
     rimraf('./one', () => ({}))
