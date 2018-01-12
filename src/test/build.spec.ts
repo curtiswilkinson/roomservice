@@ -1,0 +1,40 @@
+import Build from '../build'
+import * as fs from 'mz/fs'
+import * as rimraf from 'rimraf'
+
+describe.only('build', () => {
+  test('runs commands appropriate for the given config', async () => {
+    const config = {
+      room: {
+        one: {
+          path: '',
+          before: 'mkdir one',
+          runParallel: 'touch ./one/parallel',
+          runSynchronous: 'touch ./one/sync',
+          after: 'touch ./one/after'
+        },
+        two: {
+          path: '',
+          before: 'mkdir two',
+          runParallel: 'touch ./two/parallel',
+          runSynchronous: 'touch ./two/sync',
+
+          after: 'touch ./two/after'
+        }
+      }
+    }
+    await Build(config, { 'no-cache': true })
+
+    fs.exists('./one/parallel').then(result => expect(result).toEqual(true))
+    fs.exists('./one/sync').then(result => expect(result).toEqual(true))
+    fs.exists('./one/after').then(result => expect(result).toEqual(true))
+
+    fs.exists('./two/parallel').then(result => expect(result).toEqual(true))
+    fs.exists('./two/sync').then(result => expect(result).toEqual(true))
+    fs.exists('./two/after').then(result => expect(result).toEqual(true))
+  })
+  afterAll(() => {
+    rimraf('./one', () => ({}))
+    rimraf('./two', () => ({}))
+  })
+})

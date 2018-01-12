@@ -6,7 +6,7 @@ import Text from './text'
 
 export interface Room {
   // LifeCycle
-  runSynchronously?: string
+  runSynchronous?: string
   before?: string
   runParallel?: string
   after?: string

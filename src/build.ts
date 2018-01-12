@@ -48,10 +48,10 @@ export default async (config: Config.Config, options: Options) => {
 
   for (let name of queue.runSynchronous) {
     try {
-      Console.updateRows([name], Text.status.runSynchronously)
+      Console.updateRows([name], Text.status.runSynchronous)
 
       const room: Config.Room = config.room[name as any]
-      await Room.service(room.path, room.runSynchronously)
+      await Room.service(room.path, room.runSynchronous)
       pushSuccess(results, queue, name)
     } catch {
       pushError(results, name)
