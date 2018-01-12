@@ -1,42 +1,13 @@
 rooms:
-  front_end:
+  main:
     before: sleep 5
     runSynchronous: sleep 10
     after: sleep 5
     finally: sleep 5
     path: "./main/"
-
-  proxy:
+  secondary:
     before: sleep 2
     runSynchronous: sleep 10
     after: sleep 2
     finally: sleep 7
     path: "./secondary/"
-  
-  media_server:
-    before: sleep 2
-    runSynchronous: sleep 10
-    after: sleep 2
-    finally: sleep 7
-    path: "./secondary/"
-  
-  api:
-    before: sleep 2
-    runSynchronous: sleep 10
-    after: sleep 2
-    finally: sleep 7
-    path: "./secondary/"
-  
-  media_db_migrations:
-    before: sleep 2
-    runSynchronous: sleep 10
-    after: sleep 2
-    finally: sleep 7
-    path: "./secondary/"
-
-  core_db_migrations:
-    before: sleep 2
-    runSynchronous: sleep 10
-    after: sleep 2
-    finally: sleep 7
-    path: "./main/"
