@@ -6,6 +6,8 @@
 Roomservice is a small, friendly build tool that uses file system timestamps to
 determine if a directory needs building, and build it according to the config.
 
+![Roomservice Example](https://raw.githubusercontent.com/curtiswilkinson/roomservice/master/images/example.gif)
+
 ## Use case
 
 This project was born out of working in an application containing many,
