@@ -2,7 +2,7 @@ import Build from '../build'
 import * as fs from 'mz/fs'
 import * as rimraf from 'rimraf'
 
-describe.only('build', () => {
+describe('build', () => {
   test('runs commands appropriate for the given config', async () => {
     const config = {
       room: {
