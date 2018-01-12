@@ -38,6 +38,10 @@ describe.only('build', () => {
       fs.exists('./two/finally').then(result => expect(result).toEqual(true))
     ])
   })
+  beforeAll(() => {
+    rimraf('./one', () => ({}))
+    rimraf('./two', () => ({}))
+  })
   afterAll(() => {
     rimraf('./one', () => ({}))
     rimraf('./two', () => ({}))
