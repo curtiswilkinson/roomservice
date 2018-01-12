@@ -15,9 +15,7 @@ const getFriendlyTime = (): string => {
 
 export const noConfig =
   chalk.bold('Sorry! ') +
-  "I couldn't find a " +
-  chalk.cyan.bold('roomservice.config.toml') +
-  ' file here.\n\n' +
+  "I couldn't find a config file here.\n\n" +
   'Maybe you need to ' +
   chalk.yellow.bold('change directories') +
   ', or you can give me a ' +
