@@ -49,7 +49,7 @@ const status = {
   error: chalk.bold.red('Error'),
   cache: chalk.bold.cyan('No Change'),
   queued: chalk.bold.yellow('In Queue'),
-  runSynchronously: chalk.bold.green('Run Synchronously...'),
+  runSynchronous: chalk.bold.green('Run Synchronously...'),
   runParallel: chalk.bold.green('Run Synchronously...'),
   before: chalk.bold.green('Before...'),
   after: chalk.bold.green('After...'),
