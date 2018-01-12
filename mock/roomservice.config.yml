@@ -4,11 +4,10 @@ rooms:
     runSynchronous: sleep 10
     after: sleep 5
     finally: sleep 5
-    path: ./main/
-    
+    path: "./main/"
   secondary:
     before: sleep 2
     runSynchronous: sleep 10
-    # after: sleep 2
-    # finally: sleep 7
-    path: ./secondary/
+    after: sleep 2
+    finally: sleep 7
+    path: "./secondary/"

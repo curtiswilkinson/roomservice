@@ -42,12 +42,16 @@ describe('Config', () => {
 
     test('it handles a path to a directory with no ending slash', async () => {
       const path = './mock'
-      expect(await Config.buildPath(path)).toBe('mock/roomservice.config.toml')
+      expect(
+        (await Config.buildPath(path)).includes('roomservice.config')
+      ).toBe(true)
     })
 
     test('it handles a path to a directory with an ending slash', async () => {
       const path = './mock/'
-      expect(await Config.buildPath(path)).toBe('mock/roomservice.config.toml')
+      expect(
+        (await Config.buildPath(path)).includes('roomservice.config')
+      ).toBe(true)
     })
   })
 
@@ -58,15 +62,22 @@ describe('Config', () => {
     })
   })
 
-  describe('parse', () => {
+  describe('get', () => {
     test('it reads a config path and parses it', async () => {
-      const resultFromDir = await Config.parse('./mock')
-      const resultFromPath = await Config.parse(
-        './mock/roomservice.config.toml'
-      )
+      const resultFromDir = await Config.get('./mock')
+      const resultFromPath = await Config.get('./mock/roomservice.config.toml')
 
       expect(Object.keys(resultFromDir.rooms).length).toBeGreaterThan(0)
       expect(resultFromDir).toEqual(resultFromPath)
+    })
+
+    test('all 3 config formats parse the same', async () => {
+      const yaml = await Config.get('./mock/roomservice.config.yml')
+      const toml = await Config.get('./mock/roomservice.config.toml')
+      const json = await Config.get('./mock/roomservice.config.json')
+
+      expect(yaml).toEqual(toml)
+      expect(toml).toEqual(json)
     })
   })
 })

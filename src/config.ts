@@ -1,4 +1,5 @@
 const toml = require('toml')
+const yaml = require('js-yaml')
 import * as fs from 'mz/fs'
 import * as path from 'path'
 import { Options } from './index'
@@ -22,31 +23,59 @@ export interface Config {
   }
 }
 
-export const buildPath = (configPath: string) =>
-  fs
-    .lstat(configPath)
-    .then(
-      stats =>
-        stats.isFile()
-          ? configPath
-          : path.join(configPath, 'roomservice.config.toml')
-    )
+const findConfig = (fileNames: string[]) => {
+  const validConfigNames = ['toml', 'yaml', 'yml', 'json'].map(
+    ext => 'roomservice.config.' + ext
+  )
 
-export const readConfig = (configPath: string): Promise<any> =>
-  fs
-    .readFile(configPath)
-    .then(toml.parse)
+  const matches = fileNames.filter(name => validConfigNames.includes(name))
+  if (!matches.length) {
+    throw new Error()
+  }
+
+  return matches[0]
+}
+
+export const buildPath = async (configPath: string) => {
+  const isFile = await fs.lstat(configPath).then(stats => stats.isFile())
+
+  if (isFile) {
+    return configPath
+  }
+
+  return fs
+    .readdir(configPath)
+    .then(findConfig)
+    .then(name => path.join(configPath, name))
+}
+
+export const parse = (configPath: string) => (contents: Buffer) => {
+  const parsers: any = {
+    '.toml': toml.parse,
+    '.json': JSON.parse,
+    '.yaml': yaml.load,
+    '.yml': yaml.load
+  }
+
+  const ext = path.extname(configPath)
+
+  if (!parsers[ext]) {
+    throw new Error()
+  }
+
+  return parsers[ext](contents)
+}
+
+export const readConfig = (configPath: string): Promise<any> => {
+  return fs.readFile(configPath).then(parse(configPath))
+}
+export const get = (configPath: string): Promise<any> =>
+  buildPath(configPath)
+    .then(readConfig)
     .catch(error => {
-      if (error.code === 'ENOENT') {
-        console.log(Text.noConfig)
-      } else {
-        console.log(error)
-      }
+      console.log(Text.noConfig)
       process.exit(1)
     })
-
-export const parse = (configPath: string): Promise<any> =>
-  buildPath(configPath).then(readConfig)
 
 export const findProjectRoot = (projectPath: string) => {
   if (!projectPath) {
@@ -81,4 +110,4 @@ export const normalise = async (
   }
 }
 
-export default { parse, normalise }
+export default { get, normalise }

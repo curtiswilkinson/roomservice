@@ -1,13 +1,13 @@
 [rooms.main]
-before="sleep 5"
-runSynchronous="sleep 10"
-after="sleep 5"
-finally="sleep 5"
-path="./main/"
+before = "sleep 5"
+runSynchronous = "sleep 10"
+after = "sleep 5"
+finally = "sleep 5"
+path = "./main/"
 
 [rooms.secondary]
-before="sleep 1"
-runSynchronous="sleep 10"
-after="sleep 1"
-finally="sleep 10"
-path="./secondary/"
+before = "sleep 2"
+runSynchronous = "sleep 10"
+after = "sleep 2"
+finally = "sleep 7"
+path = "./secondary/"
