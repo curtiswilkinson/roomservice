@@ -2,7 +2,7 @@
   "name": "roomservice",
   "version": "2.0.3",
   "description":
-    "A simple, friendly build tool that tries to be lazy about what it does to save you time",
+    "A simple, friendly build tool that will only build when it sees files have changed",
   "main": "index.js",
   "scripts": {
     "test": "jest",
