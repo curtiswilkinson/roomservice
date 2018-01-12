@@ -1,11 +1,13 @@
 {
   "name": "roomservice",
   "version": "2.0.3",
-  "description": "A simple, friendly build tool that tries to be lazy about what it does to save you time",
+  "description":
+    "A simple, friendly build tool that tries to be lazy about what it does to save you time",
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test-ci": "jest && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test-ci":
+      "jest && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test:watch": "jest --watch",
     "build": "tsc",
     "prepublishOnly": "npm run test && npm run build"
@@ -41,20 +43,11 @@
   },
   "jest": {
     "collectCoverage": true,
-    "collectCoverageFrom": [
-      "!src/{text|console|index}.ts",
-      "src/**/*.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "collectCoverageFrom": ["!src/{text|console|index}.ts", "src/**/*.ts"],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
     },
-    "testMatch": [
-      "**/src/*.spec.(ts|tsx|js)"
-    ]
+    "testMatch": ["**/src/**/*.spec.(ts|tsx|js)"]
   }
 }

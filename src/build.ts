@@ -51,7 +51,7 @@ export default async (config: Config.Config, options: Options) => {
       Console.updateRows([name], Text.status.runSynchronously)
 
       const room: Config.Room = config.room[name as any]
-      await Room.service(room.path, room.runSync)
+      await Room.service(room.path, room.runSynchronously)
       pushSuccess(results, queue, name)
     } catch {
       pushError(results, name)

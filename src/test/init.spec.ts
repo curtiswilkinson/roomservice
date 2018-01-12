@@ -1,4 +1,4 @@
-import Init from './init'
+import Init from '../init'
 import * as fs from 'mz/fs'
 
 describe('Init', () => {

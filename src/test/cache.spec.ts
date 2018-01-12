@@ -1,4 +1,4 @@
-import * as Cache from './cache'
+import * as Cache from '../cache'
 
 import * as fs from 'mz/fs'
 import * as rimraf from 'rimraf'

@@ -1,4 +1,4 @@
-import Room from './room'
+import Room from '../room'
 import * as fs from 'mz/fs'
 
 describe('Room', () => {

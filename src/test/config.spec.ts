@@ -1,4 +1,4 @@
-import * as Config from './config'
+import * as Config from '../config'
 
 describe('Config', () => {
   describe('normalise()', () => {

@@ -1,4 +1,4 @@
-import Queue, { Queue as QueueT } from './queue'
+import Queue, { Queue as QueueT } from '../queue'
 
 describe('Queue', () => {
   describe('build()', () => {
