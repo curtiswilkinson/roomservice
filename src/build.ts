@@ -1,11 +1,10 @@
 import * as cli from 'cli'
 import * as path from 'path'
-import * as chalk from 'chalk'
 import { child_process } from 'mz'
 
 import * as Config from './config'
 import { Options } from './index'
-import Queue from './queue'
+import Queue, { Queue as QueueT } from './queue'
 import Cache from './cache'
 import Room from './room'
 
@@ -26,54 +25,50 @@ export default async (config: Config.Config, options: Options) => {
   const queue = await Queue.build(config, options)
 
   Console.startBuild(Object.keys(config.room))
-  Console.updateRows(queue.cache, chalk.cyan.bold('No Change'))
+  Console.updateRows(queue.cache, Text.status.cache)
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
 
   // run
-  Promise.all(queue.run.map(runHookAsync(config, results, 'run')))
+  Promise.all(queue.run.map(runHookAsync(config, queue, results, 'run')))
 
-  Console.updateRows(
-    queue.beforeService,
-    chalk.green.bold('Running beforeService...')
-  )
+  Console.updateRows(queue.beforeService, Text.status.beforeService)
 
   // beforeService
   await Promise.all(
-    queue.beforeService.map(runHookAsync(config, results, 'beforeService'))
+    queue.beforeService.map(
+      runHookAsync(config, queue, results, 'beforeService')
+    )
   )
 
-  Console.updateRows(queue.runSync, chalk.bold.yellow('In Queue'))
+  Console.updateRows(queue.runSync, Text.status.queued)
 
   // runSync
   for (let name of queue.runSync) {
     try {
-      Console.updateRows([name], chalk.bold.green('Running runSync...'))
+      Console.updateRows([name], Text.status.runSync)
 
       const room: Config.Room = config.room[name as any]
       await Room.service(room.path, room.runSync)
-      pushSuccess(results, name)
+      pushSuccess(results, queue, name)
     } catch {
       pushError(results, name)
     }
   }
 
-  Console.updateRows(
-    queue.afterService,
-    chalk.bold.green('Running afterService...')
-  )
+  Console.updateRows(queue.afterService, Text.status.afterService)
 
   // afterService
   await Promise.all(
-    queue.afterService.map(runHookAsync(config, results, 'afterService'))
+    queue.afterService.map(runHookAsync(config, queue, results, 'afterService'))
   )
 
   // Update Caches
   results.built.forEach((name: string) => Cache.write(config.room[name].path))
 
   clearInterval(stopwatch)
-  Console.updateRows(results.built, chalk.bold.green('Finished'))
-  Console.updateRows(results.errored, chalk.bold.red('Errored'))
+  Console.updateRows(results.built, Text.status.finished)
+  Console.updateRows(results.errored, Text.status.error)
 
   console.log(Text.doneWithTime(timer))
 
@@ -90,24 +85,30 @@ export default async (config: Config.Config, options: Options) => {
 
 const runHookAsync = (
   config: Config.Config,
+  queue: QueueT,
   results: Results,
   hook: string
 ) => (name: string) => {
   const room: any = config.room[name]
   return Room.service(room.path, room[hook])
-    .then(() => pushSuccess(results, name))
+    .then(() => pushSuccess(results, queue, name))
+    .then(() => Queue.complete(queue, name))
     .catch(() => pushError(results, name))
 }
 
 const pushError = (results: Results, name: string): void => {
   results.errored.push(name)
   results.built = results.built.filter(built => name !== built)
-  Console.updateRows([name], chalk.red.bold('Errored'))
+  Console.updateRows([name], Text.status.error)
 }
 
-const pushSuccess = (results: Results, name: string): void => {
+const pushSuccess = (results: Results, queue: QueueT, name: string): void => {
   if (!results.errored.includes(name)) {
     results.built.push(name)
-    Console.updateRows([name], chalk.green.bold('Waiting...'))
+    const status = Queue.find(queue, name)
+      ? Text.status.waiting
+      : Text.status.finished
+
+    Console.updateRows([name], status)
   }
 }

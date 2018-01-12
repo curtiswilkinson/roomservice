@@ -44,10 +44,22 @@ const cache =
   "\nI noticed some rooms didn't change! If you need me to build them anyway, let me know with " +
   chalk.green.bold('--no-cache')
 
+const status = {
+  finished: chalk.bold.green('Finished!'),
+  error: chalk.bold.red('Error!'),
+  cache: chalk.bold.cyan('No Change'),
+  queued: chalk.bold.yellow('In Queue'),
+  runSync: chalk.bold.green('Run Sync...'),
+  beforeService: chalk.bold.green('Before Service...'),
+  afterService: chalk.bold.green('After Service...'),
+  waiting: chalk.bold.yellow('Waiting')
+}
+
 export default {
   calculating,
   noConfig,
   doneWithTime,
   error,
-  cache
+  cache,
+  status
 }
