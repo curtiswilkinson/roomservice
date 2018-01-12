@@ -1,7 +1,13 @@
 [room.main]
-runSync="sleep 10"
+before="sleep 5"
+runSynchronous="sleep 10"
+after="sleep 5"
+finally="sleep 5"
 path="./main/"
 
 [room.secondary]
-runSync="slecccccep 10"
+before="sleep 1"
+runSynchronous="sleep 10"
+after="sleep 1"
+finally="sleep 10"
 path="./secondary/"
