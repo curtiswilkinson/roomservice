@@ -29,24 +29,26 @@ export default async (config: Config.Config, options: Options) => {
 
   const results: Results = { built: [], cache: queue.cache, errored: [] }
 
-  // run
-  Promise.all(queue.run.map(runHookAsync(config, queue, results, 'run')))
+  Console.updateRows(queue.before, Text.status.before)
 
-  Console.updateRows(queue.beforeService, Text.status.beforeService)
-
-  // beforeService
+  // before
   await Promise.all(
-    queue.beforeService.map(
-      runHookAsync(config, queue, results, 'beforeService')
-    )
+    queue.before.map(runHookAsync(config, queue, results, 'before'))
   )
 
-  Console.updateRows(queue.runSync, Text.status.queued)
+  // runParallel
+  Console.updateRows(queue.runParallel, Text.status.runParallel)
 
-  // runSync
-  for (let name of queue.runSync) {
+  await Promise.all(
+    queue.runParallel.map(runHookAsync(config, queue, results, 'runParallel'))
+  )
+
+  // runSychronously
+  Console.updateRows(queue.runSynchronous, Text.status.queued)
+
+  for (let name of queue.runSynchronous) {
     try {
-      Console.updateRows([name], Text.status.runSync)
+      Console.updateRows([name], Text.status.runSynchronously)
 
       const room: Config.Room = config.room[name as any]
       await Room.service(room.path, room.runSync)
@@ -56,11 +58,11 @@ export default async (config: Config.Config, options: Options) => {
     }
   }
 
-  Console.updateRows(queue.afterService, Text.status.afterService)
+  // after
+  Console.updateRows(queue.after, Text.status.after)
 
-  // afterService
   await Promise.all(
-    queue.afterService.map(runHookAsync(config, queue, results, 'afterService'))
+    queue.after.map(runHookAsync(config, queue, results, 'after'))
   )
 
   // Update Caches
@@ -92,7 +94,7 @@ const runHookAsync = (
   const room: any = config.room[name]
   return Room.service(room.path, room[hook])
     .then(() => pushSuccess(results, queue, name))
-    .then(() => Queue.complete(queue, name))
+    .then(() => Queue.complete(queue, hook, name))
     .catch(() => pushError(results, name))
 }
 

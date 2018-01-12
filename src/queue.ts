@@ -3,10 +3,11 @@ import { Config, Room } from './config'
 import { Options } from './index'
 
 export interface Queue {
-  run: string[]
-  beforeService: string[]
-  runSync: string[]
-  afterService: string[]
+  runParallel: string[]
+  before: string[]
+  runSynchronous: string[]
+  after: string[]
+  finally: string[]
   cache: string[]
 }
 
@@ -21,10 +22,11 @@ const _build = (processArgs: string[]) => async (
   }
 
   const queue: Queue = {
-    run: [],
-    beforeService: [],
-    runSync: [],
-    afterService: [],
+    runParallel: [],
+    before: [],
+    runSynchronous: [],
+    after: [],
+    finally: [],
     cache: []
   }
 

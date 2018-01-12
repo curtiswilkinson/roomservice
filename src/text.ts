@@ -45,13 +45,14 @@ const cache =
   chalk.green.bold('--no-cache')
 
 const status = {
-  finished: chalk.bold.green('Finished!'),
-  error: chalk.bold.red('Error!'),
+  finished: chalk.bold.green('Finished'),
+  error: chalk.bold.red('Error'),
   cache: chalk.bold.cyan('No Change'),
   queued: chalk.bold.yellow('In Queue'),
-  runSync: chalk.bold.green('Run Sync...'),
-  beforeService: chalk.bold.green('Before Service...'),
-  afterService: chalk.bold.green('After Service...'),
+  runSynchronously: chalk.bold.green('Run Synchronously...'),
+  runParallel: chalk.bold.green('Run Synchronously...'),
+  before: chalk.bold.green('Before...'),
+  after: chalk.bold.green('After...'),
   waiting: chalk.bold.yellow('Waiting')
 }
 
