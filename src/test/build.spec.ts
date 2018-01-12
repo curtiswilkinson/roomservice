@@ -9,16 +9,16 @@ describe('build', () => {
     const config = {
       rooms: {
         one: {
-          path: '',
-          before: 'mkdir one',
+          path: './test_build',
+          before: 'mkdir ./one',
           runParallel: 'touch ./one/parallel',
           runSynchronous: 'touch ./one/sync',
           after: 'touch ./one/after',
           finally: 'touch ./one/finally'
         },
         two: {
-          path: '',
-          before: 'mkdir two',
+          path: 'test_build',
+          before: 'mkdir ./two',
           runParallel: 'touch ./two/parallel',
           runSynchronous: 'touch ./two/sync',
           after: 'touch ./two/after',
@@ -29,15 +29,31 @@ describe('build', () => {
     await Build(config, { 'no-cache': true })
 
     return Promise.all([
-      fs.exists('./one/parallel').then(result => expect(result).toEqual(true)),
-      fs.exists('./one/sync').then(result => expect(result).toEqual(true)),
-      fs.exists('./one/after').then(result => expect(result).toEqual(true)),
-      fs.exists('./one/finally').then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/one/parallel')
+        .then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/one/sync')
+        .then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/one/after')
+        .then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/one/finally')
+        .then(result => expect(result).toEqual(true)),
 
-      fs.exists('./two/parallel').then(result => expect(result).toEqual(true)),
-      fs.exists('./two/sync').then(result => expect(result).toEqual(true)),
-      fs.exists('./two/after').then(result => expect(result).toEqual(true)),
-      fs.exists('./two/finally').then(result => expect(result).toEqual(true))
+      fs
+        .exists('./test_build/two/parallel')
+        .then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/two/sync')
+        .then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/two/after')
+        .then(result => expect(result).toEqual(true)),
+      fs
+        .exists('./test_build/two/finally')
+        .then(result => expect(result).toEqual(true))
     ])
   })
   describe('pushSuccess()', () => {
@@ -71,11 +87,10 @@ describe('build', () => {
     })
   })
   beforeAll(() => {
-    rimraf('./one', () => ({}))
-    rimraf('./two', () => ({}))
+    rimraf('./test_build', () => ({}))
+    return fs.mkdir('test_build')
   })
   afterAll(() => {
-    rimraf('./one', () => ({}))
-    rimraf('./two', () => ({}))
+    rimraf('./test_build', () => ({}))
   })
 })

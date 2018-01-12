@@ -44,7 +44,7 @@ const cache =
   "\nI noticed some rooms didn't change! If you need me to build them anyway, let me know with " +
   chalk.green.bold('--no-cache')
 
-const version = (version: string) => chalk.bold.grey('V' + version) + '\n'
+const version = (version: string) => chalk.grey('V' + version) + '\n'
 
 const newVersion = (currentVersion: string, newVersion: string) =>
   chalk.grey(
