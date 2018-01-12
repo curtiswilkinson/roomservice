@@ -42,7 +42,7 @@ describe('Queue', () => {
     })
   })
 
-  describe('find', () => {
+  describe('roomFinished', () => {
     const queue = {
       before: [''],
       cache: [''],
@@ -51,14 +51,14 @@ describe('Queue', () => {
       after: ['roomOne', 'roomThree'],
       finally: ['']
     }
-    test('it will return true if the room is contained in any of the hooks', () => {
-      expect(Queue.find(queue, 'roomOne')).toEqual(true)
-      expect(Queue.find(queue, 'roomTwo')).toEqual(true)
-      expect(Queue.find(queue, 'roomThree')).toEqual(true)
+    test('it will return false if the room is contained in any of the hooks', () => {
+      expect(Queue.roomFinished(queue, 'before', 'roomOne')).toEqual(false)
+      expect(Queue.roomFinished(queue, 'before', 'roomTwo')).toEqual(false)
+      expect(Queue.roomFinished(queue, 'before', 'roomThree')).toEqual(false)
     })
 
-    test('it will return false if the room is not present in any remaining hooks', () => {
-      expect(Queue.find(queue, 'roomFour')).toEqual(false)
+    test('it will return true if the room is not present in any remaining hooks', () => {
+      expect(Queue.roomFinished(queue, 'before', 'roomFour')).toEqual(true)
     })
   })
 

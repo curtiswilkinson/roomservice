@@ -9,6 +9,6 @@ rooms:
   secondary:
     before: sleep 2
     runSynchronous: sleep 10
-    after: sleep 2
-    finally: sleep 7
+    # after: sleep 2
+    # finally: sleep 7
     path: ./secondary/

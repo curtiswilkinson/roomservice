@@ -52,7 +52,7 @@ export default async (config: Config.Config, options: Options) => {
 
       const room: Config.Room = config.rooms[name as any]
       await Room.service(room.path, room.runSynchronous)
-      pushSuccess(results, queue, name)
+      pushSuccess(results, queue, 'runSynchronous', name)
     } catch {
       pushError(results, name)
     }
@@ -100,8 +100,7 @@ const runHookAsync = (
 ) => (name: string) => {
   const room: any = config.rooms[name]
   return Room.service(room.path, room[hook])
-    .then(() => pushSuccess(results, queue, name))
-    .then(() => Queue.complete(queue, hook, name))
+    .then(() => pushSuccess(results, queue, hook, name))
     .catch(() => pushError(results, name))
 }
 
@@ -111,13 +110,21 @@ const pushError = (results: Results, name: string): void => {
   Console.updateRows([name], Text.status.error)
 }
 
-const pushSuccess = (results: Results, queue: QueueT, name: string): void => {
+export const pushSuccess = (
+  results: Results,
+  queue: QueueT,
+  hook: string,
+  name: string
+): string | void => {
+  Queue.complete(queue, hook, name)
   if (!results.errored.includes(name)) {
     results.built.push(name)
-    const status = Queue.find(queue, name)
-      ? Text.status.waiting
-      : Text.status.finished
+    const status = Queue.roomFinished(queue, hook, name)
+      ? Text.status.finished
+      : Text.status.waiting
 
     Console.updateRows([name], status)
+
+    return status
   }
 }

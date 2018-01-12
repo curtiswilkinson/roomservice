@@ -59,17 +59,23 @@ const _build = (processArgs: string[]) => async (
 
 const build = _build(process.argv)
 
-const find = (queue: Queue, roomName: string): boolean => {
-  const allQueuedRooms = Object.values(queue).reduce((acc, hook) => {
-    acc = acc.concat(hook)
+const roomFinished = (
+  queue: Queue,
+  hook: string,
+  roomName: string
+): boolean => {
+  const allQueuedRooms = Object.values(queue).reduce((acc, currentHook) => {
+    if (hook !== currentHook) {
+      acc = acc.concat(currentHook)
+    }
     return acc
   }, [])
 
-  return allQueuedRooms.includes(roomName)
+  return !allQueuedRooms.includes(roomName)
 }
 
 const complete = (queue: any, hook: string, room: string) => {
   queue[hook] = queue[hook].filter((name: string) => name !== room)
 }
 
-export default { build, _build, find, complete }
+export default { build, _build, roomFinished, complete }
