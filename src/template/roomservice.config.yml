@@ -1,0 +1,11 @@
+rooms:
+  application_one:
+    path: ./application_one
+    before: yarn && yarn build
+    runSynchronous: docker-compose build application_one
+    finally: docker-compose up -d application_two
+
+  application_two:
+    path: ./application_two
+    runParallel: ./build.sh
+    after: yarn start
