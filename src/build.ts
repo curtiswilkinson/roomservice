@@ -11,6 +11,7 @@ import Version from './version'
 
 import Console from './console'
 import Text from './text'
+import Log from './log'
 
 interface Results {
   built: string[]
@@ -24,6 +25,7 @@ export default async (config: Config.Config, options: Options) => {
   const stopwatch = setInterval(() => timer++, 1000)
 
   await Version.validate()
+  await Log.configure
 
   const queue = await Queue.build(config, options)
 
@@ -56,8 +58,8 @@ export default async (config: Config.Config, options: Options) => {
       const room: Config.Room = config.rooms[name as any]
       await Room.service(room.path, room.runSynchronous)
       pushSuccess(results, queue, 'runSynchronous', name)
-    } catch {
-      pushError(results, name)
+    } catch (error) {
+      pushError(results, name, error)
     }
   }
 
@@ -104,13 +106,15 @@ const runHookAsync = (
   const room: any = config.rooms[name]
   return Room.service(room.path, room[hook])
     .then(() => pushSuccess(results, queue, hook, name))
-    .catch(() => pushError(results, name))
+    .catch(error => pushError(results, name, error))
 }
 
-const pushError = (results: Results, name: string): void => {
+const pushError = (results: Results, name: string, error: Error): void => {
   results.errored.push(name)
   results.built = results.built.filter(built => name !== built)
+
   Console.updateRows([name], Text.status.error)
+  Log.append(name, error)
 }
 
 export const pushSuccess = (

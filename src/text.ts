@@ -31,7 +31,9 @@ const calculating = chalk.bold(
 
 const error =
   `\nIt looks like there was a few ${chalk.bold.red('errors')}...` +
-  '\nIf I was you, I would go run the build commands you provided in the room and see what happens!'
+  `\nIf I was you, I would go checkout the ${chalk.bold.cyan(
+    'roomservice-error.log'
+  )} file!`
 
 const doneWithTime = (time: any) =>
   `\nOkay friend, all done! it took me ${chalk.bold.green(
