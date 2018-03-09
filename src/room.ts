@@ -8,6 +8,7 @@ const service = async (buildPath: string, command: string): Promise<any> => {
   return child_process
     .exec(command, {
       cwd: buildPath,
+      env: process.env,
       maxBuffer: 1024 * 10
     })
     .catch(e => {

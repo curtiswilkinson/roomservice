@@ -2,11 +2,13 @@
   "name": "roomservice",
   "version": "3.0.1",
   "homepage": "https://github.com/curtiswilkinson/roomservice",
-  "description": "A simple, friendly build tool that will only build when it sees files have changed",
+  "description":
+    "A simple, friendly build tool that will only build when it sees files have changed",
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test-ci": "jest && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test-ci":
+      "jest && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test:watch": "jest --watch",
     "build": "tsc",
     "prepublishOnly": "npm run test && npm run build"
@@ -36,29 +38,22 @@
     "@types/log-update": "^2.0.0",
     "@types/md5": "^2.1.32",
     "@types/mz": "^0.0.32",
+    "@types/randomstring": "^1.1.6",
     "@types/request-promise": "^4.1.39",
     "coveralls": "^3.0.0",
     "jest": "^21.2.1",
     "prettier": "^1.8.2",
+    "randomstring": "^1.1.5",
     "rimraf": "^2.6.2",
     "typescript": "^2.6.1"
   },
   "jest": {
     "collectCoverage": true,
-    "collectCoverageFrom": [
-      "!src/{text|console|index}.ts",
-      "src/**/*.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "collectCoverageFrom": ["!src/{text|console|index}.ts", "src/**/*.ts"],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/jest/typescript.js"
     },
-    "testMatch": [
-      "**/src/**/*.spec.(ts|tsx|js)"
-    ]
+    "testMatch": ["**/src/**/*.spec.(ts|tsx|js)"]
   }
 }

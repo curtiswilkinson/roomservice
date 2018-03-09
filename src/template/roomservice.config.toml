@@ -1,9 +1,0 @@
-[rooms.application_one]
-path="./application_one"
-runBeforeSync = "yarn build"
-runSync="docker-compose build"
-runAfterSync=""
-
-[rooms.application_two]
-path="./application_two"
-run="./build.sh"
