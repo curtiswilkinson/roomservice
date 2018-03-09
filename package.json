@@ -27,7 +27,8 @@
     "mz": "^2.7.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "toml": "^2.3.3"
+    "toml": "^2.3.3",
+    "username": "^3.0.0"
   },
   "devDependencies": {
     "@types/chalk": "0.4",
@@ -38,6 +39,7 @@
     "@types/mz": "^0.0.32",
     "@types/randomstring": "^1.1.6",
     "@types/request-promise": "^4.1.39",
+    "@types/username": "^3.0.0",
     "coveralls": "^3.0.0",
     "jest": "^21.2.1",
     "prettier": "^1.8.2",

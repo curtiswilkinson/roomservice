@@ -82,7 +82,7 @@ export default async (config: Config.Config, options: Options) => {
   Console.updateRows(results.built, Text.status.finished)
   Console.updateRows(results.errored, Text.status.error)
 
-  console.log(Text.doneWithTime(timer))
+  console.log(await Text.doneWithTime(timer))
 
   if (results.cache.length) {
     console.log(Text.cache)

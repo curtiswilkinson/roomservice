@@ -1,4 +1,5 @@
 import * as chalk from 'chalk'
+import * as username from 'username'
 
 const getFriendlyTime = (): string => {
   const hour = new Date().getHours()
@@ -33,8 +34,8 @@ const error =
   `\nIt looks like there was a few ${chalk.bold.red('errors')}...` +
   '\nIf I was you, I would go run the build commands you provided in the room and see what happens!'
 
-const doneWithTime = (time: any) =>
-  `\nOkay friend, all done! it took me ${chalk.bold.green(
+const doneWithTime = async (time: any) =>
+  `\nOkay ${await username()}, all done! it took me ${chalk.bold.green(
     time + ' seconds'
   )} to do everything`
 
