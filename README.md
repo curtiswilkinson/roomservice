@@ -96,3 +96,4 @@ In the event that no files in either path had changed:
 * `--cache-all` will not build anything, but flag all rooms as updated (good for
   the initial setup)
 * `--ignore` will take a list of room names, and ignore them during the build
+* `--only` will take a list of room names, and only build those rooms

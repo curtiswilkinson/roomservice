@@ -51,6 +51,17 @@ const newVersion = (currentVersion: string, newVersion: string) =>
     )}, but there is ${chalk.bold.green('V' + newVersion)}`
   ) + '\n'
 
+const bothIgoreAndOnly =
+  chalk.bold('Sorry!') +
+  ` You've provide both the ` +
+  chalk.bold.green('--ignore') +
+  ' and the ' +
+  chalk.bold.green('--only') +
+  ' options' +
+  '\n\nYou can only use ' +
+  chalk.bold('one') +
+  ' of these!'
+
 const status = {
   finished: chalk.bold.green('Finished'),
   error: chalk.bold.red('Error'),
@@ -72,5 +83,6 @@ export default {
   cache,
   status,
   version,
-  newVersion
+  newVersion,
+  bothIgoreAndOnly
 }

@@ -1,5 +1,6 @@
 import Cache from './cache'
 import { Config, Room } from './config'
+import Text from './text'
 import { Options } from './index'
 
 export interface Queue {
@@ -17,8 +18,17 @@ const _build = (processArgs: string[]) => async (
 ): Promise<Queue> => {
   let roomNames = Object.keys(config.rooms)
 
+  if (options.ignore && options.only) {
+    console.log(Text.bothIgoreAndOnly)
+    process.exit(0)
+  }
+
   if (options.ignore) {
     roomNames = roomNames.filter(name => !processArgs.includes(name))
+  }
+
+  if (options.only) {
+    roomNames = processArgs.filter(name => roomNames.includes(name))
   }
 
   const queue: Queue = {

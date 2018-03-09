@@ -12,6 +12,7 @@ export interface Options {
   'no-cache'?: boolean
   'cache-all'?: boolean
   ignore?: boolean
+  only?: boolean
 }
 
 const main = async () => {
@@ -33,7 +34,8 @@ const main = async () => {
       false,
       'A list of rooms that will not be ignored by the build',
       'bool'
-    ]
+    ],
+    only: [false, 'A list of the rooms that you want built', 'bool']
   })
 
   if (options.init) {

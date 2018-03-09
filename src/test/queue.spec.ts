@@ -39,6 +39,20 @@ describe('Queue', () => {
 
       const result = await Queue._build(['one'])(config, { ignore: true })
       expect(result.before.length).toEqual(1)
+      expect(result.before[0]).toEqual('two')
+    })
+
+    test('It will only queue rooms that are provided in the only list', async () => {
+      const config = {
+        rooms: {
+          one: { path: '', before: 'one ' },
+          two: { path: '', before: 'two' }
+        }
+      }
+
+      const result = await Queue._build(['one'])(config, { only: true })
+      expect(result.before.length).toEqual(1)
+      expect(result.before[0]).toEqual('one')
     })
   })
 
