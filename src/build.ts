@@ -1,6 +1,6 @@
 import * as cli from 'cli'
 import * as path from 'path'
-import { child_process } from 'mz'
+import { child_process, fs } from 'mz'
 
 import * as Config from './config'
 import { Options } from './index'
@@ -15,7 +15,7 @@ import Text from './text'
 interface Results {
   built: string[]
   cache: string[]
-  errored: string[]
+  errored: [string, Error][]
 }
 
 export default async (config: Config.Config, options: Options) => {
@@ -56,8 +56,8 @@ export default async (config: Config.Config, options: Options) => {
       const room: Config.Room = config.rooms[name as any]
       await Room.service(room.path, room.runSynchronous)
       pushSuccess(results, queue, 'runSynchronous', name)
-    } catch {
-      pushError(results, name)
+    } catch (e) {
+      pushError(results, name, e)
     }
   }
 
@@ -80,7 +80,7 @@ export default async (config: Config.Config, options: Options) => {
 
   clearInterval(stopwatch)
   Console.updateRows(results.built, Text.status.finished)
-  Console.updateRows(results.errored, Text.status.error)
+  Console.updateRows(results.errored.map(([name]) => name), Text.status.error)
 
   console.log(await Text.doneWithTime(timer))
 
@@ -89,6 +89,12 @@ export default async (config: Config.Config, options: Options) => {
   }
 
   if (results.errored.length) {
+    await fs.writeFile(
+      path.join(options.project || './', 'roomservice-error.log'),
+      results.errored
+        .map(([name, error]) => 'Error in room => ' + name + '\n' + error)
+        .join('\n\n')
+    )
     console.log(Text.error)
   }
 
@@ -104,11 +110,11 @@ const runHookAsync = (
   const room: any = config.rooms[name]
   return Room.service(room.path, room[hook])
     .then(() => pushSuccess(results, queue, hook, name))
-    .catch(() => pushError(results, name))
+    .catch(error => pushError(results, name, error))
 }
 
-const pushError = (results: Results, name: string): void => {
-  results.errored.push(name)
+const pushError = (results: Results, name: string, error: Error): void => {
+  results.errored.push([name, error])
   results.built = results.built.filter(built => name !== built)
   Console.updateRows([name], Text.status.error)
 }
@@ -120,7 +126,7 @@ export const pushSuccess = (
   name: string
 ): string | void => {
   Queue.complete(queue, hook, name)
-  if (!results.errored.includes(name)) {
+  if (!results.errored.map(([name]) => name).includes(name)) {
     results.built.push(name)
     const status = Queue.roomFinished(queue, hook, name)
       ? Text.status.finished
