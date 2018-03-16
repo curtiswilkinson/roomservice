@@ -97,3 +97,4 @@ In the event that no files in either path had changed:
   the initial setup)
 * `--ignore` will take a list of room names, and ignore them during the build
 * `--only` will take a list of room names, and only build those rooms
+* `--no-finally` will skip the finally hook when building

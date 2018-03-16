@@ -56,6 +56,44 @@ describe('build', () => {
         .then(result => expect(result).toEqual(true))
     ])
   })
+  test('it writes an error log file when a room errors', async () => {
+    const config = {
+      rooms: {
+        one: {
+          path: './test_build',
+          before: 'rmf-stf'
+        },
+        two: {
+          path: 'test_build'
+        }
+      }
+    }
+
+    await Build(config, { 'no-cache': true })
+
+    return await fs
+      .exists('./roomservice-error.log')
+      .then(result => expect(result).toEqual(true))
+      .then(() => fs.unlink('./roomservice-error.log'))
+  })
+
+  test('it will not run the finally hook if no-finally is provided', async () => {
+    const config = {
+      rooms: {
+        one: {
+          path: './test_build',
+          before: 'touch test',
+          finally: 'rm -rf test'
+        }
+      }
+    }
+
+    await Build(config, { 'no-cache': true, 'no-finally': true })
+
+    return await fs
+      .exists('./test_build/test')
+      .then(result => expect(result).toEqual(true))
+  })
   describe('pushSuccess()', () => {
     const resultsNew: any = { cache: [], built: [], errored: [] }
     const queueNew: any = {

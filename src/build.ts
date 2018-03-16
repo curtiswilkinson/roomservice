@@ -71,9 +71,11 @@ export default async (config: Config.Config, options: Options) => {
   // finally
   Console.updateRows(queue.finally, Text.status.finally)
 
-  await Promise.all(
-    queue.finally.map(runHookAsync(config, queue, results, 'finally'))
-  )
+  if (!options['no-finally']) {
+    await Promise.all(
+      queue.finally.map(runHookAsync(config, queue, results, 'finally'))
+    )
+  }
 
   // Update Caches
   results.built.forEach((name: string) => Cache.write(config.rooms[name].path))

@@ -11,6 +11,7 @@ export interface Options {
   index?: boolean
   'no-cache'?: boolean
   'cache-all'?: boolean
+  'no-finally'?: boolean
   ignore?: boolean
   only?: boolean
 }
@@ -30,6 +31,7 @@ const main = async () => {
       'Build all services regardless of cache status',
       'bool'
     ],
+    'no-finally': [false, 'Skip the finally hook', 'bool'],
     ignore: [
       false,
       'A list of rooms that will not be ignored by the build',
