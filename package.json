@@ -1,6 +1,6 @@
 {
   "name": "roomservice",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "homepage": "https://github.com/curtiswilkinson/roomservice",
   "description": "A simple, friendly build tool that will only build when it sees files have changed",
   "main": "index.js",
