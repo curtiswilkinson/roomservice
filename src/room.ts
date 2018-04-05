@@ -9,7 +9,7 @@ const service = async (buildPath: string, command: string): Promise<any> => {
     .exec(command, {
       cwd: buildPath,
       env: process.env,
-      maxBuffer: 1024 * 10
+      maxBuffer: 1024 * 30
     })
     .catch(e => {
       throw e
