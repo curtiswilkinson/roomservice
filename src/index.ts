@@ -12,6 +12,7 @@ export interface Options {
   'no-cache'?: boolean
   'cache-all'?: boolean
   'no-finally'?: boolean
+  'no-after'?: boolean
   ignore?: boolean
   only?: boolean
 }
@@ -32,6 +33,7 @@ const main = async () => {
       'bool'
     ],
     'no-finally': [false, 'Skip the finally hook', 'bool'],
+    'no-after': [false, 'Skip the after hook', 'bool'],
     ignore: [
       false,
       'A list of rooms that will not be ignored by the build',

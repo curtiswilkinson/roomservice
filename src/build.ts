@@ -64,9 +64,11 @@ export default async (config: Config.Config, options: Options) => {
   // after
   Console.updateRows(queue.after, Text.status.after)
 
-  await Promise.all(
-    queue.after.map(runHookAsync(config, queue, results, 'after'))
-  )
+  if (!options['no-after']) {
+    await Promise.all(
+      queue.after.map(runHookAsync(config, queue, results, 'after'))
+    )
+  }
 
   // finally
   Console.updateRows(queue.finally, Text.status.finally)
