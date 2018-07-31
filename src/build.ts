@@ -100,6 +100,9 @@ export default async (config: Config.Config, options: Options) => {
         .join('\n\n')
     )
     console.log(Text.error)
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1)
+    }
   }
 
   return
